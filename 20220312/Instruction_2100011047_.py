@@ -48,7 +48,7 @@ In order to simplify the problem,we make the extra rules below:
     2)  We regard `jmp patch_lazy_pointers(mach_header	const*,	patch_t*,	unsigned	long)`
         as an instruction with **one** argument.
     3)  Instructions with the same code name and different argument numbers
-        were regarded as **different** kinds of instructions in **Phase 2 & 3**
+        were regarded as **different** kinds of instructions in **Phase 2 & 3 & 4**
 '''
 def FilterCount(code):
     cnt = len(code) - 4
@@ -58,6 +58,16 @@ def FilterCount(code):
     if(code[3] == "jmp" and cnt > 4):
         cnt = 1
     return cnt
+
+def tName(x):
+    if(x >= 3):
+        return "多参指令"
+    elif(x == 2):
+        return "双参指令"
+    elif(x == 1):
+        return "单参指令"
+    else:
+        return "无参指令"
 
 wBook.create_sheet(index=1,title="instructionType")
 sheet = wBook.worksheets[1]
@@ -74,10 +84,7 @@ for code in codes:
 col = 1
 for argc,cnames in argMap.items():
     row = 1
-    if(argc > 2):
-        sheet.cell(row,col).value = "3+ Arguments"
-    else:
-        sheet.cell(row,col).value = str(argc) + " Arguments"
+    sheet.cell(row,col).value = tName(argc)
     row += 1
     for cname in cnames:
         if(cname in repMap):
@@ -87,17 +94,12 @@ for argc,cnames in argMap.items():
         sheet.cell(row,col).value = cname
         row += 1
     col += 1
+"""
 for k,v in repMap.items():
     if(v > 1):
         print(k,v) # for debug
-
+"""
 #Phase 3
-
-def tName(x):
-    if(x >= 3):
-        return "3+ Arguments"
-    else:
-        return str(x) + " Arguments"
 
 wBook.create_sheet(index=2,title="Summary")
 sheet = wBook.worksheets[2]

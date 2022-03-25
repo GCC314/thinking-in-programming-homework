@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF8">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/buttons.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/box.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/grid.css') }}">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body style="text-align: center;">
+    <div id="Box" class="box">
+        <div id="Msg">
+            {{systemMsg|safe}}
+        </div>
+        <form action="/" method="post">
+            <input type="submit" class="buttons" name="back" value="Back to index page">
+        </form>
+        <form action="/input" method="post">
+            <input type="submit" class="buttons" name="random" value="Random generate one">
+        </form>
+        <form action="/input" method="post">
+            <input type="submit" class="buttons" name="reset" value="Reset the sudoku">
+        </form>
+        <div id="sudokubox">
+            {{placeContent|safe}}
+        </div>
+        <form action="/input" method="post" id="sudokuUpload">
+            <input type="button" class="buttons" name="submit" id="btnSubmit" value="Submit the sudoku">
+        </form>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/input.js') }}"></script>
+    </div>
+</body>
