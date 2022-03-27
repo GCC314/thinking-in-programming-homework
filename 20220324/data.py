@@ -52,7 +52,7 @@ def isValid(mat):
 	return True
 
 __SDK_ELEM_MIN = 22
-__SDK_ELEM_MAX = 30
+__SDK_ELEM_MAX = 50
 
 def difficulty(mat):
 	alpha = 0
