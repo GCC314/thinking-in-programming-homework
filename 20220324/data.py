@@ -51,8 +51,8 @@ def isValid(mat):
 						s.add(mat[x][y])
 	return True
 
-__SDK_ELEM_MIN = 22
-__SDK_ELEM_MAX = 50
+__SDK_ELEM_MIN = 40
+__SDK_ELEM_MAX = 55
 
 def difficulty(mat):
 	alpha = 0

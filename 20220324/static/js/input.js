@@ -48,9 +48,13 @@ function countBlank(){
 
 $(".zeroCell").click(function(){
     u = parseInt(prompt("Please input number!(1~9)",9));
-    if(u != NaN && (1 <= u && u <= 9)){
+    if(u != NaN && (0 <= u && u <= 9)){
         bak = $(this).html();
-        $(this).html(u.toString());
+        if(u == 0){
+            $(this).html("");
+        }else{
+            $(this).html(u.toString());
+        }
         if(isValid($(this).attr("id")) && countBlank() > 0){
             return;
         }else{
