@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF8">
-    <title>Index</title>
+    <title>Game</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/buttons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/box.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/page.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/grid.css') }}">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body style="text-align: center;">
-    <div id="Box" class="box">
-        {{systemMsg|safe}}
-        <form action="/" method="post">
-            <input type="submit" class="buttons" name="back" value="Back to index page">
-        </form>
-        <div id="sudokubox">
-            {{placeContent|safe}}
+<body class="page">
+    <div id="CenterBox" class="centerbox">
+        <div id="Box" class="box">
+            {{systemMsg|safe}}
+            <form action="/" method="post">
+                <input type="submit" class="buttons" name="back" value="Back to index page">
+            </form>
+            <div id="sudokubox">
+                {{placeContent|safe}}
+            </div>
+            <script type="text/javascript" src="{{ url_for('static', filename='js/game.js') }}"></script>
         </div>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/game.js') }}"></script>
     </div>
 </body>

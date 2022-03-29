@@ -1,0 +1,12 @@
+@font-face {
+    font-family: Ubuntu;
+    src: url("/static/fonts/Ubuntu-R.ttf");
+}
+
+.page{
+    font-family:'Ubuntu';
+    text-align: center;
+    background-color: #ffffff;
+    background-image: url("/static/img/889639.jpg");
+    background-size: 100%;
+}

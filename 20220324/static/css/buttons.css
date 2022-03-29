@@ -1,4 +1,19 @@
 .buttons
 {
     margin: 5px;
+    padding: 0 20px;
+    font-size: 16px;
+    height: 36px;
+    background-color: #d8d8d8;
+    color: #777777;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 2px 2px 2px #aaaaaa;
+}
+
+.pfbuttons
+{
+    background-color:#007dd1;
+    color: #ffffff;
+    box-shadow: 2px 2px 2px #777777;
 }

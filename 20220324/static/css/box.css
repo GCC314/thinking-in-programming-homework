@@ -5,3 +5,16 @@
     transform: translate(-50%, -50%);
     position: absolute;
 }
+
+.centerbox
+{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 40%;
+    height: 80%;
+    background-color: #fffffff0;
+    box-shadow: 2px 2px 2px #888888;
+    border-radius: 18px;
+}

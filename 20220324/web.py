@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,send_from_directory
 import data
 
 DATA_FILE_NAME = "Sudoku.data"
@@ -73,6 +73,10 @@ def input():
 	else:
 		tabSudoku = generate_sdkpage()
 	return render_template("input.html",placeContent = tabSudoku,systemMsg = wMsg)
+
+@webSudoku.route("/favicon.ico")
+def favicon():
+    return webSudoku.send_static_file("favicon.ico")
 
 if(__name__ == "__main__"):
 	webSudoku.run(host = "127.0.0.1",port = 5055,debug = True)

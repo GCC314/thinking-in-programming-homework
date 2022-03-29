@@ -136,6 +136,6 @@ $(".zeroCell").click(function(){
 });
 
 function DealEnd(){
-    endstr = "<p class='tips'>Congratulations!</p><br><input type='image' src='finish.png'><br><form action='/game' method='post'><br><input type='submit' value='Start next round!' class='buttons'><br></form>"
+    endstr = "<p class='tips'>Congratulations!</p><br><input type='image' src='/static/img/finish.png'><br><form action='/game' method='post'><br><input type='submit' value='Start next round!' class='buttons pfbuttons'><br></form>"
     $("#Box").html(endstr)
 }
