@@ -12,9 +12,18 @@
     <div id="CenterBox" class="centerbox">
         <div id="Box" class="box">
             {{systemMsg|safe}}
-            <form action="/" method="post">
-                <input type="submit" class="buttons" name="back" value="Back to index page">
-            </form>
+            <table style="border:none;margin:auto;">
+                <td style="background-color: #00000000;">
+                    <form action="/game" method="post">
+                        <input type="submit" class="buttons" name="game" value="Change one">
+                    </form>
+                </td>
+                <td style="background-color: #00000000;">
+                    <form action="/" method="post">
+                        <input type="submit" class="buttons" name="back" value="Back">
+                    </form>
+                </td>
+            </table>
             <div id="sudokubox">
                 {{placeContent|safe}}
             </div>
