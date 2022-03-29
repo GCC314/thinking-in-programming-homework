@@ -87,7 +87,35 @@ $("#btnSubmit").click(function(){
         }
         else{
             $("#Msg").html("Succeeded to store a sudoku!");
+            for(var x = 0;x < 9;x++){
+                for(var y = 0;y < 9;y++){
+                    var cur = "#td_" + x.toString() + y.toString();
+                    $(cur).html("");
+                    $(cur).toggleClass("zeroCell",true);
+                    $(cur).on("click",function(){
+                        u = parseInt(prompt("Please input number!(0~9)",9));
+                        if(u != NaN && (0 <= u && u <= 9)){
+                            bak = $(this).html();
+                            if(u == 0){
+                                $(this).html("");
+                            }else{
+                                $(this).html(u.toString());
+                            }
+                            if(isValid($(this).attr("id")) && countBlank() > 0){
+                                return;
+                            }else{
+                                $(this).html(bak);
+                                if(countBlank() == 1){
+                                    alert("Please leave at least one blank grid!");
+                                    return;
+                                }
+                            }
+                        }
+                        alert("Invalid input!");
+                    })
+                }
+            }
         }
-        $("#sudokubox").html(data.substring(1));
+        // $("#sudokubox").html(data.substring(1));
     });
 })

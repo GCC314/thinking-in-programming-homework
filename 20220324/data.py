@@ -122,6 +122,8 @@ def randomgFile(filename):
         return seq2mat(random.choice(lines))
 
 def solvable(seq):
+    if(not isValid(seq2mat(seq))):
+        return False
     for ans in solve_sudoku(seq2mat(seq)):
         return True
     return False
