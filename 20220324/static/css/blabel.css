@@ -1,0 +1,22 @@
+.blabel
+{
+    font-size:30px;
+    color:black;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+@font-face {
+    font-family: FiraCode;
+    src: url("/static/fonts/FiraCode-Regular.ttf");
+}
+
+.timer
+{
+    font-family:"FiraCode";
+}
+
+.notablelabel
+{
+    color:#007dd1;
+}
