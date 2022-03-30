@@ -6,12 +6,13 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/box.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/page.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/grid.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/blabel.css') }}">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="page">
     <div id="CenterBox" class="centerbox">
         <div id="Box" class="box">
-            {{systemMsg|safe}}
+            <p class="blabel timer" id="TimerBand">00:00:00</p>
             <table style="border:none;margin:auto;">
                 <td style="background-color: #00000000;">
                     <form action="/game" method="post">

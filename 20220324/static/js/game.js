@@ -123,7 +123,39 @@ function countBlank(){
     return cnt;
 }
 
+var TouchFlag = false;
+var TimerSeconds = 0;
+var mTimer = "";
+
+$(document).ready(function(){
+    TouchFlag = false;
+    TimerSeconds = 0;
+})
+
+function FF(str){
+    while(str.length < 2){
+        str = "0" + str;
+    }
+    return str;
+}
+
+function TimeToString(time){
+    var h = Math.floor(time / 3600);
+    var m = Math.floor((time % 3600) / 60);
+    var s = Math.floor(time % 60);
+    return FF(h.toString()) + ":" + FF(m.toString()) + ":" + FF(s.toString());
+}
+
+function TimerUpdate(){
+    TimerSeconds++;
+    $("#TimerBand").html(TimeToString(TimerSeconds));
+}
+
 $(".zeroCell").click(function(){
+    if(!TouchFlag){
+        TouchFlag = true;
+        mTimer = setInterval("TimerUpdate();", 1000);
+    }
     stru = prompt("Please input number!(0~9)",9);
     if(stru == ""){
         return;
@@ -144,6 +176,10 @@ $(".zeroCell").click(function(){
 });
 
 function DealEnd(){
-    endstr = "<p class='tips'>Congratulations!</p><br><input type='image' src='/static/img/finish.png'><br><form action='/game' method='post'><br><input type='submit' value='Start next round!' class='buttons pfbuttons'><br></form>"
-    $("#Box").html(endstr)
+    endstr = ["","",""];
+    clearInterval(mTimer);
+    endstr[0] = "<p class='blabel'>Congratulations!</p><br><p class='blabel'>You finished in </p><br><p class='blabel notablelabel timer'>";
+    endstr[1] = TimeToString(TimerSeconds);
+    endstr[2] = "</p><br><input type='image' src='/static/img/finish.png'><br><form action='/game' method='post'><br><input type='submit' value='Start next round!' class='buttons pfbuttons'><br></form>";
+    $("#Box").html(endstr.join(""));
 }
