@@ -93,7 +93,11 @@ $("#btnSubmit").click(function(){
                     $(cur).html("");
                     $(cur).toggleClass("zeroCell",true);
                     $(cur).on("click",function(){
-                        u = parseInt(prompt("Please input number!(0~9)",9));
+                        stru = prompt("Please input number!(0~9)",9);
+                        if(stru == ""){
+                            return;
+                        }
+                        u = parseInt(stru);
                         if(u != NaN && (0 <= u && u <= 9)){
                             bak = $(this).html();
                             if(u == 0){

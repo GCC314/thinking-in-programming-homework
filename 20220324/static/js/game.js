@@ -124,7 +124,11 @@ function countBlank(){
 }
 
 $(".zeroCell").click(function(){
-    u = parseInt(prompt("Please input number!(0~9)",9));
+    stru = prompt("Please input number!(0~9)",9);
+    if(stru == ""){
+        return;
+    }
+    u = parseInt(stru);
     if(u != NaN && (0 <= u && u <= 9)){
         if(u == 0){
             $(this).html("");
