@@ -4,15 +4,15 @@
 
 ## 预览
 
-![Screenshot 2022-04-04 at 14-32-27 Sudoku Index.png](img/Screenshot_2022-04-04_at_14-32-27_Sudoku_Index.png)
+![Screenshot 2022-04-04 at 14-32-27 Sudoku Index.png](screenshot/Screenshot_2022-04-04_at_14-32-27_Sudoku_Index.png)
 
-![Screenshot 2022-04-04 at 14-32-55 Sudoku Input.png](img/Screenshot_2022-04-04_at_14-32-55_Sudoku_Input.png)
+![Screenshot 2022-04-04 at 14-32-55 Sudoku Input.png](screenshot/Screenshot_2022-04-04_at_14-32-55_Sudoku_Input.png)
 
-![Screenshot 2022-04-04 at 14-33-58 Sudoku Input.png](img/Screenshot_2022-04-04_at_14-33-58_Sudoku_Input.png)
+![Screenshot 2022-04-04 at 14-33-58 Sudoku Input.png](screenshot/Screenshot_2022-04-04_at_14-33-58_Sudoku_Input.png)
 
-![Screenshot 2022-04-04 at 14-34-19 Sudoku Game.png](img/Screenshot_2022-04-04_at_14-34-19_Sudoku_Game.png)
+![Screenshot 2022-04-04 at 14-34-19 Sudoku Game.png](screenshot/Screenshot_2022-04-04_at_14-34-19_Sudoku_Game.png)
 
-![Screenshot 2022-04-04 at 14-34-37 Sudoku Game.png](img/Screenshot_2022-04-04_at_14-34-37_Sudoku_Game.png)
+![Screenshot 2022-04-04 at 14-34-37 Sudoku Game.png](screenshot/Screenshot_2022-04-04_at_14-34-37_Sudoku_Game.png)
 
 ## 使用说明
 
