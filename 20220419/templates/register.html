@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF8">
+    <title>Register</title>
+    <script type="text/javascript" src="/static/js/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/box.css">
+    <link rel="stylesheet" type="text/css" href="static/css/buttons.css">
+    <link rel="stylesheet" type="text/css" href="static/css/page.css">
+    <link rel="stylesheet" type="text/css" href="static/css/tbox.css">
+</head>
+<body class="page">
+    <div id="CenterBox" class="centerbox">
+        <div id="Menu" class="menubox">
+            {{statusMsg|safe}}
+            <img src="static/img/slogan.png">
+            <form action="/" method="post" id="package_form">
+                <input type="hidden" id="PKG" name="PKG" value="reg_submit">
+                <input type="text" class="bdtbox" name="username" value="" placeholder="User Name">
+                <br>
+                <input type="password" class="bdtbox" name="passwd" value="" placeholder="Password">
+                <br>
+                <input type="submit" class="cbuttons hcbuttons" name="submit" value="Register">
+            </form>
+        </div>
+    </div>
+</body>

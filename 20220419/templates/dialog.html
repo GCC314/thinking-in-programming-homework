@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF8">
+    <title>iChat</title>
+    <link rel="stylesheet" type="text/css" href="static/css/box.css">
+    <link rel="stylesheet" type="text/css" href="static/css/popup.css">
+    <link rel="stylesheet" type="text/css" href="static/css/dpage.css">
+    <link rel="stylesheet" type="text/css" href="static/css/buttons.css">
+    <link rel="stylesheet" type="text/css" href="static/css/symbol.css">
+    <link rel="stylesheet" type="text/css" href="static/css/tbox.css">
+    <link rel="stylesheet" type="text/css" href="static/css/bubble.css">
+    <script type="text/javascript" src="/static/js/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="allbox" style="width:100%;height:100%;">
+        <div id="sidebar" style="height:100%;width:25%;display: inline-block;vertical-align: top;">
+            <div id="statusbar" style="height:31px;">
+                <div style="float:left;margin:0px 3px 0px 3px;width:auto;">
+                <p id="username" class="usersnote" style="margin:0px 3px 0px 3px;"></p>
+                </div>
+                <div style="float:right;">
+                    <form action="/" method="post">
+                        <input type="hidden" id="PKG" name="PKG" value="logout_submit">
+                        <input type="submit" class="iconicbtn" name="submit" value="">
+                    </form>
+                </div>
+                <div style="float:right;">
+                    <input type='button' class='groupbtn_ iconicbtn' id='groupadd' value=''>
+                </div>
+            </div>
+            <div id="groupbox" style="overflow:auto;">
+            </div>
+        </div>
+        <div id="mainbox" style="height:100%;width:74%;display: inline-block;vertical-align: top;">
+            <div id="dialogbox" style="overflow:auto;width:100%;height:80%;border-bottom: 1px;border-bottom-style: solid;border-bottom-color: #888;background-color: #ddd;">
+            </div>
+            <div id="inputbox" style="width:100%;height:19%;background-color: #eee;">
+                <textarea id="inputtxt" name="inputtxt" style="height:90%;width:93%;margin-top:3px;resize:none;"></textarea>
+                <input type="button" id="submittxt" class="sendbtn" name="submittxt" value=" Send " style="margin-inline:5px;vertical-align: top;margin-top:3px;">
+            </div>
+        </div>
+    </div>
+    <div id="pop_addg" class="popup_window" style="text-align:center;">
+        <input type="button" name="pop_addg_esc" id="pop_addg_esc" class="popup_esc iconicbtn" value="" style="float:left;">
+        <div style="text-align:center;vertical-align:middle;">
+            <input type="text" value="" name="gname" id="txt_gname" class="poptbox" placeholder="Group Name">
+            <br>
+            <input type="text" value="" name="ulist" id="txt_ulist" class="poptbox" placeholder="Group members">
+            <br>
+            <input type="button" value="submit" name="addg_submit" id="addg_submit" class="hcbuttons cbuttons">
+        </div>
+    </div>
+    <script type="text/javascript" src="/static/js/dialog.js"></script>
+</body>

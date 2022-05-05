@@ -1,0 +1,66 @@
+.cbuttons
+{
+    margin: 10px;
+    padding: 0 20px;
+    font-size: 16px;
+    height: 36px;
+    background-color: #d8d8d8;
+    color: #777777;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 2px 2px 2px #aaaaaa;
+}
+
+.hcbuttons
+{
+    background-color:#008e18;
+    color: #ffffff;
+    box-shadow: 2px 2px 2px #777777;
+}
+
+.sidebuttons
+{
+    height:50px;
+    width:100%;
+    background-color: #ffffffff;
+    border-left-style: none;
+    border-right-style: none;
+    border-style:solid;
+    border-width: 1px;
+}
+
+.sidebuttons_c
+{
+    background-color: #eeeeeeee;
+}
+
+.usersnote{
+    width:100%;
+}
+
+.sendbtn_{
+    background-color: #fff;
+    color: #008e18;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: #008e18;
+    padding: 4px;
+}
+.sendbtn{
+    background-color: #1daa35;
+    color: #fff;
+    border-style: none;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.iconicbtn{
+    height: 30px;
+    width: 30px;
+    font-family: 'Material';
+    font-size: 15px;
+    color: #008e18;
+    background-color: #ffffffff;
+    border-style: none;
+}

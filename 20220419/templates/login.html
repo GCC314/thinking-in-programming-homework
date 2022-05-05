@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF8">
+    <title>Login</title>
+    <script type="text/javascript" src="/static/js/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/box.css">
+    <link rel="stylesheet" type="text/css" href="static/css/buttons.css">
+    <link rel="stylesheet" type="text/css" href="static/css/page.css">
+    <link rel="stylesheet" type="text/css" href="static/css/tbox.css">
+</head>
+<body class="page">
+    <div id="CenterBox" class="centerbox">
+        <div id="Menu" class="menubox">
+            {{statusMsg|safe}}
+            <img src="static/img/slogan.png">
+            <form action="/" method="post" id="package_form">
+                <input type="hidden" id="PKG" name="PKG" value="">
+                <input type="text" class="bdtbox" name="username" value="" placeholder="User Name">
+                <br>
+                <input type="password" class="bdtbox" name="passwd" value="" placeholder="Password">
+                <br>
+                <table style="margin: 0px auto;">
+                    <tr>
+                        <td><input type="button" class="cbuttons hcbuttons" id="login" value="Login"></td>
+                        <td><input type="button" class="cbuttons" id="reg" value="Register"></td>
+                    </tr>
+                </table>
+                <script type="text/javascript">
+                    $("#login").click(function(){
+                        $("#PKG").val("login_submit");
+                        $("#package_form").submit();
+                    });
+                    $("#reg").click(function(){
+                        $("#PKG").val("reg_jmp");
+                        $("#package_form").submit();
+                    });
+                </script>
+            </form>
+        </div>
+    </div>
+</body>

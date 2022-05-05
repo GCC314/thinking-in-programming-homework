@@ -1,0 +1,38 @@
+.groupBox{
+    background-color: #fefefe;
+}
+
+.groupBox_notification{
+    background-color: #ffa9a9;
+}
+
+#allbox{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.menubox
+{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.centerbox
+{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background-color: #fffffff0;
+    box-shadow: 2px 2px 2px #888888;
+    border-radius: 18px;
+}
+
+.dmsg{
+    color: black;
+}
