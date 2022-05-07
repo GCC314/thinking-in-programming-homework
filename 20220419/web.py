@@ -16,6 +16,8 @@ def root():
         return res
     if(not "PKG" in request.form):
         return render_template("login.html")
+    if(request.form["PKG"] == ""):
+        return render_template("login.html")
     if(request.form["PKG"] == "logout_submit"):
         session.pop('username')
         return render_template("login.html")
@@ -25,9 +27,9 @@ def root():
         uname = request.form["username"]
         upwd = request.form["passwd"]
         if(not databs.isNameValid(uname)):
-            return render_template("register.html",statusMsg="Invalid username!")
+            return render_template("register.html",statusMsg="Empty username!")
         if(not databs.isPswdValid(upwd)):
-            return render_template("register.html",statusMsg="Invalid password!")
+            return render_template("register.html",statusMsg="Too short password!")
         if(databs.UserExist(uname)):
             return render_template("register.html",statusMsg="User already exists!")
         databs.UserRegister(uname,upwd)
@@ -36,9 +38,9 @@ def root():
         uname = request.form["username"]
         upwd = request.form["passwd"]
         if(not databs.isNameValid(uname)):
-            return render_template("login.html",statusMsg="Invalid username!")
+            return render_template("login.html",statusMsg="Empty username!")
         if(not databs.isPswdValid(upwd)):
-            return render_template("login.html",statusMsg="Invalid password!")
+            return render_template("login.html",statusMsg="Too short password!")
         if(not databs.UserExist(uname)):
             return render_template("login.html",statusMsg="User does not exist!")
         if(not databs.UserPwdCheck(uname,upwd)):
@@ -68,8 +70,7 @@ def dataReq():
 @webApp.route("/dataPush",methods=["post"])
 def dataPush():
     if(request.form['rqType'] == "newgroup"):
-        databs.addGroup(request.form['gname'],request.form['ulist'])
-        return ""
+        return databs.addGroup(request.form['gname'],request.form['ulist'])
     if(request.form['rqType'] == "sendmsg"):
         databs.sendMsg(request.form['gname'],request.form['sender'],request.form['ts'],request.form['mtype'],request.form['msg'])
         return ""

@@ -12,7 +12,12 @@ def Time2string(tm):
     return time.localtime(tm)
 
 def isNameValid(mstr):
-    return mstr != ""
+    if(mstr == ""):
+        return False
+    for c in mstr:
+        if(not(c == '_' or c.isalnum())):
+            return false
+    return True
 
 def isPswdValid(mstr):
     return len(mstr) >= 8
@@ -49,6 +54,12 @@ def dbInit():
 def UserExist(username):
     global dbConn
     sqlstring = f"""select username from USERS where username="{username}" """
+    dbRec = dbConn.execute(sqlstring).fetchone()
+    return dbRec != None
+
+def GroupExist(groupname):
+    global dbConn
+    sqlstring = f"""select groupname from GROUPS where groupname="{groupname}" """
     dbRec = dbConn.execute(sqlstring).fetchone()
     return dbRec != None
 
@@ -91,6 +102,7 @@ def addGroup2User(username,groupname):
 
 def addGroup(groupname,usernames):
     global dbConn
+    if(GroupExist(groupname)): return "F"
     sqlstring = f"""insert into GROUPS
     (groupname,users)
     values("{groupname}","{S2B(usernames)}")
@@ -99,6 +111,7 @@ def addGroup(groupname,usernames):
     for user in json.loads(usernames):
         addGroup2User(user,groupname)
     dbConn.commit()
+    return "S"
 
 def getGroupAllUser(groupname):
     global dbConn

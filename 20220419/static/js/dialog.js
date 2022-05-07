@@ -189,6 +189,7 @@ $("#groupadd").click(function(){
     $("#txt_gname").val("");
     $("#txt_uname_sch").val("");
     $("#ul_ulist").html(genAddGroupbtn(userName,true));
+    $("#addg_sug").html("");
     $("#pop_addg").css({"display":"block"});
 })
 
@@ -217,18 +218,43 @@ $(".gadd_li").dblclick(function(){
     $(this).remove();
 })
 
+function isValidGroupname(gname){
+    if(gname == "") return false;
+    for(var i = 0;i < gname.length;i++){
+        if(gname[i] == ' ') return false;
+        if(gname[i] == '<') return false;
+        if(gname[i] == '>') return false;
+    }
+    return true;
+}
+
 $("#addg_submit").click(function(){
     groupName = $("#txt_gname").val();
+    if(!isValidGroupname(groupName)){
+        $("#addg_sug").html("Invalid Group Name");
+        $("#txt_gname").val("");
+        return;
+    }
     usrList = "";
     $(".gadd_li").each(function(){
         if(usrList == "") usrList += "\"" + $(this).html() + "\"";
         else usrList += ",\"" + $(this).html() + "\"";
     })
     usrList = "[" + usrList + "]";
+    var isSuccess = true;
     $.post("/dataPush",{rqType:"newgroup",gname:groupName,ulist:usrList},function(data){
-        if(updateGroup()) renderGroup();
+        if(data == "F"){
+            isSuccess = false;
+            return;
+        }
     },async=false);
-    $(this).parent().parent().css({"display":"none"});
+    if(isSuccess){
+        if(updateGroup()) renderGroup();
+        $(this).parent().parent().css({"display":"none"});
+    }else{
+        $("#addg_sug").html("Group Name exists");
+        $("#txt_gname").val("");
+    }
 })
 
 $(".groupbtn").click(function(){

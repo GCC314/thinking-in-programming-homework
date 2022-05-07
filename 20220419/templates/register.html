@@ -14,12 +14,27 @@
             {{statusMsg|safe}}
             <img src="static/img/slogan.png">
             <form action="/" method="post" id="package_form">
-                <input type="hidden" id="PKG" name="PKG" value="reg_submit">
+                <input type="hidden" id="PKG" name="PKG" value="">
                 <input type="text" class="bdtbox" name="username" value="" placeholder="User Name">
                 <br>
                 <input type="password" class="bdtbox" name="passwd" value="" placeholder="Password">
                 <br>
-                <input type="submit" class="cbuttons hcbuttons" name="submit" value="Register">
+                <table style="margin: 0px auto;">
+                    <tr>
+                        <td><input type="button" class="cbuttons hcbuttons" id="register" value="Register"></td>
+                        <td><input type="button" class="cbuttons" id="goback" value="Go Back"></td>
+                    </tr>
+                </table>
+                <script type="text/javascript">
+                    $("#register").click(function(){
+                        $("#PKG").val("reg_submit");
+                        $("#package_form").submit();
+                    });
+                    $("#goback").click(function(){
+                        $("#PKG").val("");
+                        $("#package_form").submit();
+                    });
+                </script>
             </form>
         </div>
     </div>
