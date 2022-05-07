@@ -64,3 +64,13 @@
     background-color: #ffffffff;
     border-style: none;
 }
+
+.iconicbtn_small{
+    height: 18px;
+    width: 18px;
+    font-family: 'Material';
+    font-size: 15px;
+    color: #008e18;
+    background-color: #ffffffff;
+    border-style: none;
+}

@@ -180,23 +180,55 @@ $("#submittxt").click(function(){
     $("textarea[name=inputtxt]").val("");
 })
 
+function genAddGroupbtn(uname,dable=false){
+    if(dable) return "<li class='gadd_li gadd_li_dable' id='gadd_li_n_" + uname + "'>" + uname + "</li>";
+    else return "<li class='gadd_li' id='gadd_li_n_" + uname + "'>" + uname + "</li>"
+}
+
 $("#groupadd").click(function(){
     $("#txt_gname").val("");
-    $("#txt_ulist").val("");
+    $("#txt_uname_sch").val("");
+    $("#ul_ulist").html(genAddGroupbtn(userName,true));
     $("#pop_addg").css({"display":"block"});
 })
 
-$(".popup_esc").click(function(){
+$(".popup_esc_btn").click(function(){
     $(this).parent().css({"display":"none"});
+})
+
+$("#btn_sch").click(function(){
+    unameSch = $("#txt_uname_sch").val();
+    console.log(unameSch);
+    $.post("/dataReq",{rqType:"userexist",username:unameSch},function(data){
+        if(data == "E"){
+            var bakstr = $("#ul_ulist").html();
+            $("#ul_ulist").html(bakstr + genAddGroupbtn(unameSch));
+            $("#gadd_li_n_" + unameSch).on("dblclick",function(){
+                if($(this).hasClass("gadd_li_dable")) return;
+                $(this).remove();
+            });
+        }
+    },async=false);
+    $("#txt_uname_sch").val("");
+})
+
+$(".gadd_li").dblclick(function(){
+    if($(this).hasClass("gadd_li_dable")) return;
+    $(this).remove();
 })
 
 $("#addg_submit").click(function(){
     groupName = $("#txt_gname").val();
-    usrList = $("#txt_ulist").val();
+    usrList = "";
+    $(".gadd_li").each(function(){
+        if(usrList == "") usrList += "\"" + $(this).html() + "\"";
+        else usrList += ",\"" + $(this).html() + "\"";
+    })
+    usrList = "[" + usrList + "]";
     $.post("/dataPush",{rqType:"newgroup",gname:groupName,ulist:usrList},function(data){
         if(updateGroup()) renderGroup();
     },async=false);
-    $(this).parent().css({"display":"none"});
+    $(this).parent().parent().css({"display":"none"});
 })
 
 $(".groupbtn").click(function(){

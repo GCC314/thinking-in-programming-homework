@@ -21,11 +21,11 @@
                 <div style="float:right;">
                     <form action="/" method="post">
                         <input type="hidden" id="PKG" name="PKG" value="logout_submit">
-                        <input type="submit" class="iconicbtn" name="submit" value="">
+                        <input type="submit" class="iconicbtn" name="submit" value="" title="Logout">
                     </form>
                 </div>
                 <div style="float:right;">
-                    <input type='button' class='groupbtn_ iconicbtn' id='groupadd' value=''>
+                    <input type='button' class='groupbtn_ iconicbtn' id='groupadd' value='' title="Add a group">
                 </div>
             </div>
             <div id="groupbox" style="overflow:auto;">
@@ -41,12 +41,19 @@
         </div>
     </div>
     <div id="pop_addg" class="popup_window" style="text-align:center;">
-        <input type="button" name="pop_addg_esc" id="pop_addg_esc" class="popup_esc iconicbtn" value="" style="float:left;">
+        <input type="button" name="pop_addg_esc" id="pop_addg_esc" class="popup_esc_btn" value="" style="float:left;">
         <div style="text-align:center;vertical-align:middle;">
-            <input type="text" value="" name="gname" id="txt_gname" class="poptbox" placeholder="Group Name">
-            <br>
-            <input type="text" value="" name="ulist" id="txt_ulist" class="poptbox" placeholder="Group members">
-            <br>
+            <div class="poptwrap">
+                <input type="text" value="" name="gname" id="txt_gname" class="poptbox" placeholder="Group Name" style="width:90%;">
+            </div>
+            <div class="poptwrap">
+                <input type="text" value="" name="uname_sch" id="txt_uname_sch" class="poptbox" placeholder="Search for a user..." style="width:224px;display:inline-block;">
+                <input type="button" value="" id="btn_sch" class="iconicbtn_small" style="display:inline-block;">
+            </div>
+            <div id="div_ulist" style="height:110px;overflow-y:scroll;background-color: #f0f0f0;border-radius:2px;margin:20px;">
+                <ul id="ul_ulist" style="list-style-type: none;">
+                </ul>
+            </div>
             <input type="button" value="submit" name="addg_submit" id="addg_submit" class="hcbuttons cbuttons">
         </div>
     </div>

@@ -10,6 +10,11 @@
 }
 
 .poptbox{
+    height: 100%;
+    border-style: none;
+}
+
+.poptwrap{
     margin: 10px;
     height: 30px;
     width: 250px;
@@ -18,4 +23,6 @@
     border-color: #888;
     border-style: solid;
     font-size: 16px;
+    text-align: left;
+    padding-left: 6px;
 }

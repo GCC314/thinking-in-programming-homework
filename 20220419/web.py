@@ -58,6 +58,11 @@ def dataReq():
         return databs.reqSyncMsg(request.form['gname'],request.form['lbts'],request.form['ubts'],session['username'])
     if(request.form['rqType'] == "updgroup"):
         return databs.getUserGroup(request.form['username'])
+    if(request.form['rqType'] == "userexist"):
+        if(databs.UserExist(request.form['username'])):
+            return "E"
+        else:
+            return "O"
     return ""
 
 @webApp.route("/dataPush",methods=["post"])

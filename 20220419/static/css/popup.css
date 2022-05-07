@@ -14,8 +14,29 @@
     border-radius: 10px;
 }
 
-.popup_esc{
-    top: -10px;
-    left: -10px;
+.popup_esc_btn{
+    top: -15px;
+    left: -15px;
     position: relative;
+    height: 20px;
+    width: 20px;
+    font-family: 'Material';
+    font-size: 15px;
+    color: #008e18;
+    background-color: #ffffffff;
+    border-style: none;
+    float: right;
+}
+
+.gadd_li{
+    padding: 3px;
+    border-bottom: 1px;
+    border-bottom-style: solid;
+    border-color: #999;
+    background-color: #ffffff00;
+    width: auto;
+}
+
+.gadd_li_dable{
+    color: #666;
 }
