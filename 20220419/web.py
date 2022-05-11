@@ -1,6 +1,8 @@
 from flask import Flask,render_template,request,session,make_response
 import os,datetime
 import databs
+import math,time
+import hashlib
 
 webApp = Flask(__name__)
 webApp.secret_key = os.urandom(24)
@@ -27,7 +29,7 @@ def root():
         uname = request.form["username"]
         upwd = request.form["passwd"]
         if(not databs.isNameValid(uname)):
-            return render_template("register.html",statusMsg="Empty username!")
+            return render_template("register.html",statusMsg="Invalid username!")
         if(not databs.isPswdValid(upwd)):
             return render_template("register.html",statusMsg="Too short password!")
         if(databs.UserExist(uname)):
@@ -38,7 +40,7 @@ def root():
         uname = request.form["username"]
         upwd = request.form["passwd"]
         if(not databs.isNameValid(uname)):
-            return render_template("login.html",statusMsg="Empty username!")
+            return render_template("login.html",statusMsg="Invalid username!")
         if(not databs.isPswdValid(upwd)):
             return render_template("login.html",statusMsg="Too short password!")
         if(not databs.UserExist(uname)):
@@ -75,6 +77,44 @@ def dataPush():
         databs.sendMsg(request.form['gname'],request.form['sender'],request.form['ts'],request.form['mtype'],request.form['msg'])
         return ""
     return ""
+
+@webApp.route("/fileUp",methods=["post"])
+def fileUp():
+    fileHold = request.files["upload_file"]
+    infodig = str(math.floor(time.time() * 10000))
+    dirpfx = hashlib.md5(infodig.encode(encoding="UTF-8")).hexdigest()
+    os.mkdir("./static/storage/file/" + dirpfx)
+    fpath = "./static/storage/file/" + dirpfx + "/" + fileHold.filename
+    fileHold.save(fpath)
+    return dirpfx
+
+
+@webApp.route("/fileDown",methods=["get"])
+def fileDown():
+    fpath = "storage/file/"
+    fid = request.args["fid"]
+    flist = os.listdir("./static/" + fpath + fid)
+    fname = flist[0]
+    return webApp.send_static_file(fpath + fid + "/" + fname)
+
+@webApp.route("/imgUp",methods=["post"])
+def imgUp():
+    imgHold = request.files["upload_img"]
+    infodig = str(math.floor(time.time() * 10000))
+    dirpfx = hashlib.md5(infodig.encode(encoding="UTF-8")).hexdigest()
+    os.mkdir("./static/storage/img/" + dirpfx)
+    fpath = "./static/storage/img/" + dirpfx + "/" + imgHold.filename
+    imgHold.save(fpath)
+    return dirpfx
+
+
+@webApp.route("/imgDown",methods=["get"])
+def imgDown():
+    fpath = "storage/img/"
+    fid = request.args["fid"]
+    flist = os.listdir("./static/" + fpath + fid)
+    fname = flist[0]
+    return webApp.send_static_file(fpath + fid + "/" + fname)
 
 if(__name__ == "__main__"):
     databs.dbInit()

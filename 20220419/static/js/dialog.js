@@ -13,12 +13,32 @@ function genGroupbtn(groupname,ischosen=false){
 function genDlgbtn(mts,user,tstr,msgstr){
     return "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <p class='bubbletxt'>" + msgstr + "</p></div>"
 }
+function genFilebtn(mts,user,tstr,msgstr){
+    fmsg = JSON.parse(msgstr);
+    return "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <a target='_blank' class='bubbletxt' href='/fileDown?fid=" + fmsg.fid + "'>" + fmsg.fname + "</a></div>"
+}
+function genImgbtn(mts,user,tstr,msgstr){
+    fmsg = JSON.parse(msgstr);
+    return "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <img style='max-width:200px;max-height:200px;object-fit:scale-down;' class='bubbletxt' src='/imgDown?fid=" + fmsg.fid + "'></div>"
+}
 function genDiatdbtn(msg){
     console.log(msg);
     dt = new Date(msg[2]);
-    ustr = genDlgbtn(msg[2].toString(),msg[1],dt.toUTCString(),msg[4]);
-    console.log(ustr);
-    console.log(dt.toUTCString());
+    if(msg[3] == 't'){
+        ustr = genDlgbtn(msg[2].toString(),msg[1],dt.toUTCString(),msg[4]);
+        console.log(ustr);
+        console.log(dt.toUTCString());
+    }
+    else if(msg[3] == 'f'){
+        ustr = genFilebtn(msg[2].toString(),msg[1],dt.toUTCString(),msg[4]);
+        console.log(ustr);
+        console.log(dt.toUTCString());
+    }
+    else if(msg[3] == 'i'){
+        ustr = genImgbtn(msg[2].toString(),msg[1],dt.toUTCString(),msg[4]);
+        console.log(ustr);
+        console.log(dt.toUTCString());
+    }
     return ustr
 }
 
@@ -123,12 +143,12 @@ function updateGroup(){
 }
 
 
-function SendMsg(msgstr){
+function SendMsg(msgstr,type='t'){
     ndt = new Date();
     nt = ndt.getTime();
-    msg = JSON.stringify([focusedGroup,userName,nt,'t',msgstr])
-    $.post("/dataPush",{rqType:"sendmsg",gname:focusedGroup,sender:userName,ts:nt,mtype:'t',msg:msgstr},function(data){
-        msgCache[focusedGroup].push([focusedGroup,userName,nt,'t',msgstr])
+    msg = JSON.stringify([focusedGroup,userName,nt,type,msgstr])
+    $.post("/dataPush",{rqType:"sendmsg",gname:focusedGroup,sender:userName,ts:nt,mtype:type,msg:msgstr},function(data){
+        msgCache[focusedGroup].push([focusedGroup,userName,nt,type,msgstr])
     },async=false);
 }
 
@@ -268,3 +288,120 @@ $(".groupbtn").click(function(){
     $(this).toggleClass("sidebuttons_c",true);
     renderDialog();
 })
+
+
+// FILE UPLOAD PART
+
+fuploading = false;
+
+$("#sendfile").click(function(){
+    if(focusedGroup == "") return;
+    if(fuploading) return;
+    $("#fileholder").trigger("click");
+})
+
+// TODO : make the button animated
+
+$("#fileholder").change(function(){
+    flist = $(this).get(0).files;
+    if(flist.length == 0 || flist == undefined){
+        return;
+    }
+    fitem = flist[0]; 
+    if(fitem.size > 50 * 1024 * 1024){
+        alert("File too big!");
+        return;
+    }
+    var formData = new FormData();
+    formData.append("upload_file",fitem);
+    $.ajax({
+        url:"/fileUp",type:'POST',cache:false,data:formData,processData:false,contentType:false,dataType: "json",beforeSend:function(){
+            $("#sendfile").val("");
+            fuploading = true;
+        },success:function(result,status,xhr){
+            console.log("success",result,status,xhr);
+            fmsg = {
+                fid : result,
+                fname : fitem.name
+            };
+            SendMsg(JSON.stringify(fmsg),'f');
+            $("#sendfile").val("");
+            fuploading = false;
+        },error:function(xhr,status,error){
+            console.log("error",xhr,status,error);
+            if(xhr.status == 200){
+                fmsg = {
+                    fid : xhr.responseText,
+                    fname : fitem.name
+                };
+                SendMsg(JSON.stringify(fmsg),'f');
+                $("#sendfile").val("");
+                fuploading = false;
+            }else{
+                alert("Failed to upload");
+                $("#sendfile").val("");
+                fuploading = false;
+            }
+        }
+    });
+})
+
+//FILE UPLOAD PART END
+
+// IMG UPLOAD PART
+
+iuploading = false;
+
+$("#sendimg").click(function(){
+    if(focusedGroup == "") return;
+    if(iuploading) return;
+    $("#imgholder").trigger("click");
+})
+
+// TODO : make the button animated
+
+$("#imgholder").change(function(){
+    flist = $(this).get(0).files;
+    if(flist.length == 0 || flist == undefined){
+        return;
+    }
+    fitem = flist[0]; 
+    if(fitem.size > 10 * 1024 * 1024){
+        alert("File too big!");
+        return;
+    }
+    var formData = new FormData();
+    formData.append("upload_img",fitem);
+    $.ajax({
+        url:"/imgUp",type:'POST',cache:false,data:formData,processData:false,contentType:false,dataType: "json",beforeSend:function(){
+            $("#sendimg").val("");
+            iuploading = true;
+        },success:function(result,status,xhr){
+            console.log("success",result,status,xhr);
+            fmsg = {
+                fid : result,
+                fname : fitem.name
+            };
+            SendMsg(JSON.stringify(fmsg),'i');
+            $("#sendimg").val("");
+            iuploading = false;
+        },error:function(xhr,status,error){
+            console.log("error",xhr,status,error);
+            if(xhr.status == 200){
+                fmsg = {
+                    fid : xhr.responseText,
+                    fname : fitem.name
+                };
+                SendMsg(JSON.stringify(fmsg),'i');
+                $("#sendimg").val("");
+                iuploading = false;
+            }else{
+                alert("Failed to upload");
+                $("#sendimg").val("");
+                iuploading = false;
+            }
+        }
+    });
+})
+
+//IMG UPLOAD PART END

@@ -32,11 +32,17 @@
             </div>
         </div>
         <div id="mainbox" style="height:100%;width:74%;display: inline-block;vertical-align: top;">
-            <div id="dialogbox" style="overflow:auto;width:100%;height:80%;border-bottom: 1px;border-bottom-style: solid;border-bottom-color: #888;background-color: #ddd;">
+            <div id="dialogbox" style="overflow:auto;width:100%;height:75%;border-bottom: 1px;border-bottom-style: solid;border-bottom-color: #888;background-color: #ddd;">
             </div>
-            <div id="inputbox" style="width:100%;height:19%;background-color: #eee;">
-                <textarea id="inputtxt" name="inputtxt" style="height:90%;width:93%;margin-top:3px;resize:none;"></textarea>
-                <input type="button" id="submittxt" class="sendbtn" name="submittxt" value=" Send " style="margin-inline:5px;vertical-align: top;margin-top:3px;">
+            <div id="inputbox" style="width:100%;height:24%;background-color: #eee;">
+                <div id="sendbar" style="width:100%;height:32px">
+                    <input type="file" id="imgholder" style="width:1px;height:1px;display:none;" accept="image/*">
+                    <input type="file" id="fileholder" style="width:1px;height:1px;display:none;">
+                    <input type="button" id="sendimg" class="iconicbtn" value="" placeholder="Send a picture" style="float:left;color:#222">
+                    <input type="button" id="sendfile" class="iconicbtn" value="" placeholder="Send a file not larger than 50M" style="float:left;color:#222">
+                    <input type="button" id="submittxt" class="sendbtn" name="submittxt" value=" Send " style="float:right;">
+                </div>
+                <textarea id="inputtxt" name="inputtxt" style="height:auto;width:100%;margin-top:3px;resize:none;"></textarea>
             </div>
         </div>
     </div>
@@ -46,7 +52,7 @@
             <div class="suggest" id="addg_sug">
             </div>
             <div class="poptwrap">
-                <input type="text" value="" name="gname" id="txt_gname" class="poptbox" placeholder="Group Name" style="width:90%;">
+                <input type="text" value="" name="gname" id="txt_gname" class="poptbox" placeholder="New Group's Name" style="width:90%;">
             </div>
             <div class="poptwrap">
                 <input type="text" value="" name="uname_sch" id="txt_uname_sch" class="poptbox" placeholder="Search for a user..." style="width:224px;display:inline-block;">

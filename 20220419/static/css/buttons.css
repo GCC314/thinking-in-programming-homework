@@ -53,6 +53,7 @@
     border-style: none;
     border-radius: 4px;
     padding: 4px;
+    margin: 1px;
 }
 
 .iconicbtn{
@@ -61,7 +62,7 @@
     font-family: 'Material';
     font-size: 15px;
     color: #008e18;
-    background-color: #ffffffff;
+    background-color: #ffffff01;
     border-style: none;
 }
 
@@ -71,6 +72,6 @@
     font-family: 'Material';
     font-size: 15px;
     color: #008e18;
-    background-color: #ffffffff;
+    background-color: #ffffff01;
     border-style: none;
 }
