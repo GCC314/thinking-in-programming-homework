@@ -3,24 +3,7 @@ import json
 import math
 import time
 import base64
-
-
-def getTime():
-    return int(floor(time.time()))
-
-def Time2string(tm):
-    return time.localtime(tm)
-
-def isNameValid(mstr):
-    if(mstr == ""):
-        return False
-    for c in mstr:
-        if(not(c == '_' or c.isalnum())):
-            return false
-    return True
-
-def isPswdValid(mstr):
-    return len(mstr) >= 8
+import hashlib
 
 def S2B(ostr):
     return base64.b64encode(ostr.encode()).decode()
@@ -36,6 +19,7 @@ def dbInit():
     dbConn.execute("""CREATE TABLE IF NOT EXISTS USERS(
         username    text not null,
         passwd      text not null,
+        email       text not null,
         groups      text
     )""")
     dbConn.execute("""CREATE TABLE IF NOT EXISTS GROUPS(
@@ -57,6 +41,12 @@ def UserExist(username):
     dbRec = dbConn.execute(sqlstring).fetchone()
     return dbRec != None
 
+def EmailExist(email):
+    global dbConn
+    sqlstring = f"""select email from USERS where email="{email}" """
+    dbRec = dbConn.execute(sqlstring).fetchone()
+    return dbRec != None
+
 def GroupExist(groupname):
     global dbConn
     sqlstring = f"""select groupname from GROUPS where groupname="{groupname}" """
@@ -69,11 +59,20 @@ def UserPwdCheck(username,passwd):
     dbRec = dbConn.execute(sqlstring).fetchone()
     return dbRec[0] == passwd
 
-def UserRegister(username,passwd):
+def UserRegister(username,passwd,email):
     global dbConn
     sqlstring = f"""insert into USERS
-    (username,passwd,groups)
-    values("{username}","{passwd}","{S2B("[]")}")
+    (username,passwd,email,groups)
+    values("{username}","{passwd}","{email.lower()}","{S2B("[]")}")
+    """
+    dbConn.execute(sqlstring)
+    dbConn.commit()
+
+def UserPswdReset(email):
+    global dbConn
+    sqlstring = f"""update USERS
+    set passwd="12345678"
+    where email="{email.lower()}"
     """
     dbConn.execute(sqlstring)
     dbConn.commit()
@@ -83,6 +82,13 @@ def getUserGroup(username):
     sqlstring = f"""select groups from USERS where username="{username}" """
     dbRec = dbConn.execute(sqlstring).fetchone()
     return B2S(dbRec[0])
+
+def getUserEmailDig(username):
+    global dbConn
+    sqlstring = f"""select email from USERS where username="{username}" """
+    dbRec = dbConn.execute(sqlstring).fetchone()
+    estr = dbRec[0]
+    return hashlib.md5(estr.encode(encoding="UTF-8")).hexdigest()
 
 def addGroup2User(username,groupname):
     global dbConn

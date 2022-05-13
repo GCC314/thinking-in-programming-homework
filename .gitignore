@@ -1,3 +1,6 @@
 *.pdf
 __pycache__/
 Sudoku.data
+mail.pswd
+chatdb.db
+20220419/static/storage/

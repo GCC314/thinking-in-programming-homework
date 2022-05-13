@@ -75,3 +75,16 @@
     background-color: #ffffff01;
     border-style: none;
 }
+
+.hidbutton{
+    margin: 0px 0px 0px 5px;
+    background-color: #00000001;
+    border-style: none;
+    font-size: 13px;
+    color: #008e18;
+    height: 90%;
+}
+
+.hidbutton_disable{
+    color: #333333;
+}

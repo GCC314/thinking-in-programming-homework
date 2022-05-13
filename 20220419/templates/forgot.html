@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF8">
-    <title>Login</title>
+    <title>Forgot</title>
     <script type="text/javascript" src="/static/js/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/box.css">
     <link rel="stylesheet" type="text/css" href="static/css/buttons.css">
@@ -13,19 +13,20 @@
         <div id="Menu" class="menubox">
             <p class="suggest" id="suggest">{{statusMsg}}</p>
             <img src="static/img/slogan.png">
-            <input type="text" class="bdtbox" id="username" value="" placeholder="User Name">
+            <input type="email" class="bdtbox" id="email" value="" placeholder="Email">
             <br>
-            <input type="password" class="bdtbox" id="passwd" value="" placeholder="Password">
-            <br>
+            <div class="poptwrap">
+                <input type="text" value="" name="vcode" id="vcode" class="poptbox" placeholder="Code" style="width:110px;display:inline-block;height:90%">
+                <input type="button" value="Send Vcode" id="sendvm" class="hidbutton" style="float:right;">
+            </div>
             <table style="margin: 0px auto;">
                 <tr>
-                    <td><input type="button" class="cbuttons hcbuttons" id="login" value="Login"></td>
-                    <td><input type="button" class="cbuttons" id="reg" value="Register"></td>
+                    <td><input type="button" class="cbuttons" id="resetpw" value="Reset passwd" disabled></td>
+                    <td><input type="button" class="cbuttons" id="goback" value="Go Back"></td>
                 </tr>
             </table>
-            <a id="forgot">Forgot password?</a>
             <script type="text/javascript" src="/static/js/cc.js"></script>
-            <script type="text/javascript" src="/static/js/login.js"></script>
+            <script type="text/javascript" src="/static/js/register.js"></script>
         </div>
     </div>
 </body>
