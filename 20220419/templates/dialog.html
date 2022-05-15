@@ -9,15 +9,14 @@
     <link rel="stylesheet" type="text/css" href="static/css/symbol.css">
     <link rel="stylesheet" type="text/css" href="static/css/tbox.css">
     <link rel="stylesheet" type="text/css" href="static/css/bubble.css">
+    <link rel="stylesheet" type="text/css" href="static/css/tarea.css">
     <script type="text/javascript" src="/static/js/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div id="allbox" style="width:100%;height:100%;">
         <div id="sidebar" style="height:100%;width:25%;display: inline-block;vertical-align: top;">
-            <div id="statusbar" style="height:31px;">
-                <div style="float:left;margin:0px 3px 0px 3px;width:auto;">
-                <p id="username" class="usersnote" style="margin:0px 3px 0px 3px;"></p>
-                </div>
+            <div id="statusbar" style="height: 40px;">
+                <img id="sd_avatar" src="https://www.gravatar.com/avatar/d4dd2adb9e23192b0744b0081521f0b6?s=32" title="username" style="border-radius:50%">
                 <div style="float:right;">
                     <form action="/" method="post">
                         <input type="hidden" id="PKG" name="PKG" value="logout_submit">
@@ -42,7 +41,7 @@
                     <input type="button" id="sendfile" class="iconicbtn" value="" placeholder="Send a file not larger than 50M" style="float:left;color:#222">
                     <input type="button" id="submittxt" class="sendbtn" name="submittxt" value=" Send " style="float:right;">
                 </div>
-                <textarea id="inputtxt" name="inputtxt" style="height:auto;width:100%;margin-top:3px;resize:none;"></textarea>
+                <div id="inputtxt" class="tarea" contenteditable="true"></div>
             </div>
         </div>
     </div>

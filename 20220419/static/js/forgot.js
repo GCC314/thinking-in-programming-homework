@@ -8,7 +8,7 @@ function validchk(){
     eFlag = "";
     $.post("/uInfo",{rqType:"emailexist",email:email},function(data){eFlag = data;});
     if(eFlag != "E"){
-        $("#suggest").html("Email not exists!");
+        $("#suggest").html("Email not in use!");
         $("#email").val("");
         return false;
     }
@@ -82,8 +82,8 @@ $("#sendvm").click(function(){
             return;
         }
         TimerStart();
-        $("#register").attr("disabled",false);
-        $("#register").toggleClass("hcbuttons",true);
+        $("#resetpw").attr("disabled",false);
+        $("#resetpw").toggleClass("hcbuttons",true);
     });
 })
 

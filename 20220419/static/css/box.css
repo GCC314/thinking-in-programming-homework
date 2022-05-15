@@ -36,3 +36,11 @@
 .dmsg{
     color: black;
 }
+.boxmsg{
+    width:100%;
+}
+.avtholder{
+    height:32px;
+    width:32px;
+    float:left;
+}

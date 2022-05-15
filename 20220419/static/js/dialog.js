@@ -5,21 +5,32 @@ var userName = "";
 var groupList = []
 var msgList = {}
 var msgCache = {}
+var edig = {}
 
 function genGroupbtn(groupname,ischosen=false){
     if(ischosen) return "<input type='button' class='groupbtn sidebuttons sidebuttons_c' id='gbtn_" + groupname + "' value='" + groupname + "'>";
     else return "<input type='button' class='groupbtn sidebuttons' id='gbtn_" + groupname + "' value='" + groupname + "'>";
 }
+function gEdig(user){
+    if(!(user in edig)) $.post("/dataReq",{rqType:"emaildig",username:user},function(data){edig[user] = data;});
+    return edig[user];
+}
+function addbubble(user,bubblec){
+    return "<div class='boxmsg'><img src='https://www.gravatar.com/avatar/" + gEdig(user) + "?s=32' class='avtholder'>" + bubblec + "</div>"
+}
 function genDlgbtn(mts,user,tstr,msgstr){
-    return "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <p class='bubbletxt'>" + msgstr + "</p></div>"
+    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <p class='bubbletxt'>" + msgstr + "</p></div>"
+    return addbubble(user,bubbles);
 }
 function genFilebtn(mts,user,tstr,msgstr){
     fmsg = JSON.parse(msgstr);
-    return "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <a target='_blank' class='bubbletxt' href='/fileDown?fid=" + fmsg.fid + "'>" + fmsg.fname + "</a></div>"
+    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <a target='_blank' class='bubbletxt' href='/fileDown?fid=" + fmsg.fid + "'>" + fmsg.fname + "</a></div>"
+    return addbubble(user,bubbles);
 }
 function genImgbtn(mts,user,tstr,msgstr){
     fmsg = JSON.parse(msgstr);
-    return "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <img style='max-width:200px;max-height:200px;object-fit:scale-down;' class='bubbletxt' src='/imgDown?fid=" + fmsg.fid + "'></div>"
+    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <img style='max-width:200px;max-height:200px;object-fit:scale-down;' class='bubbletxt' src='/imgDown?fid=" + fmsg.fid + "'></div>"
+    return addbubble(user,bubbles);
 }
 function genDiatdbtn(msg){
     console.log(msg);
@@ -60,8 +71,6 @@ function appendDialog(deltaList){
         return;
     }
     if(deltaList.length == 0) return;
-    console.log("dl");
-    console.log(deltaList);
     dtstring = $("#dialogbox").html();
     for(var msgidx in deltaList){
         msg = deltaList[msgidx];
@@ -181,6 +190,11 @@ $(window).on("load",function(){
     nowTimestamp = 0;
     userName = document.cookie.substring(9);
     console.log(userName);
+    $.post("/dataReq",{rqType:"emaildig",username:userName},function(data){
+        iurl = "https://www.gravatar.com/avatar/" + data + "?s=32"
+        $("#sd_avatar").attr("src",iurl);
+        $("#sd_avatar").attr("title",userName);
+    },async=false);
     $("#username").html(userName);
     Sync();
     mTimer = setInterval("Sync();",4000);
@@ -191,13 +205,13 @@ $("#submittxt").click(function(){
         console.log("attempt to submit text failed");
         return;
     }
-    var txt = $("textarea[name=inputtxt]").val();
+    var txt = $("#inputtxt").html();
     if(txt == ""){
         alert("Message cannot be empty!");
         return;
     }
     SendMsg(txt);
-    $("textarea[name=inputtxt]").val("");
+    $("#inputtxt").html("");
 })
 
 function genAddGroupbtn(uname,dable=false){

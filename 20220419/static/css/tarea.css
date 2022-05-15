@@ -1,0 +1,17 @@
+.tarea{
+    width: 99%;
+    height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3px;
+    outline: 0;
+    border: 1px solid #a0b3d6;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 2px;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius: 2px;
+    background-color: #ffffff;
+}
