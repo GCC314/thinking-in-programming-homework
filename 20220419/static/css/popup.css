@@ -23,9 +23,14 @@
     font-family: 'Material';
     font-size: 15px;
     color: #008e18;
-    background-color: #ffffffff;
+    background-color: #00000000;
     border-style: none;
     float: right;
+    border-radius: 50%;
+}
+
+.popup_esc_btn:hover{
+    background-color: #00000022;
 }
 
 .gadd_li{

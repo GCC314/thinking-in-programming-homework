@@ -6,28 +6,31 @@
     height: 36px;
     background-color: #d8d8d8;
     color: #777777;
-    border-radius: 10px;
+    border-radius: 3px;
     border: none;
-    box-shadow: 2px 2px 2px #aaaaaa;
+    box-shadow: #888 1px 1px 1px;
+}
+
+
+.cbuttons:hover{
+    box-shadow: #666 2px 2px 1px;
 }
 
 .hcbuttons
 {
     background-color:#008e18;
     color: #ffffff;
-    box-shadow: 2px 2px 2px #777777;
 }
 
 .sidebuttons
 {
     height:50px;
-    width:100%;
     background-color: #ffffffff;
-    border-left-style: none;
-    border-right-style: none;
-    border-bottom-style:solid;
-    border-bottom-color: #aaa;
-    border-width: 1px;
+    margin: 5px;
+    background-color: #fff;
+    padding: 3px;
+    border-radius: 5px;
+    box-shadow: #777 1px 1px 2px;
 }
 
 .sidebuttons_c
@@ -39,22 +42,9 @@
     width:100%;
 }
 
-.sendbtn_{
-    background-color: #fff;
-    color: #008e18;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 4px;
-    border-color: #008e18;
-    padding: 4px;
-}
 .sendbtn{
     background-color: #1daa35;
-    color: #fff;
-    border-style: none;
-    border-radius: 4px;
-    padding: 4px;
-    margin: 1px;
+    color:#ffffff;
 }
 
 .iconicbtn{
@@ -65,6 +55,31 @@
     color: #008e18;
     background-color: #ffffff01;
     border-style: none;
+    border-radius: 50%;
+}
+
+.iconicbtn:hover{
+    background-color: #00000022;
+}
+
+.iconicbtn_big{
+    height: 40px;
+    width: 40px;
+    font-family: 'Material';
+    font-size: 15px;
+    border-style: none;
+    border-radius: 50%;
+    margin:3px;
+    box-shadow: #888 1px 1px 1px;
+}
+
+.iconicbtn_big:hover{
+    box-shadow: #666 2px 2px 1px;
+}
+
+.iconicbtn_big_common{
+    color: #333333;
+    background-color: #ffffff;
 }
 
 .iconicbtn_small{
@@ -75,6 +90,10 @@
     color: #008e18;
     background-color: #ffffff01;
     border-style: none;
+    border-radius: 50%;
+}
+.iconicbtn_small:hover{
+    background-color: #00000022;
 }
 
 .hidbutton{

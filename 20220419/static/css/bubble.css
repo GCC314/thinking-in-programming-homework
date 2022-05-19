@@ -5,5 +5,15 @@
 
 .bubbletxt{
     color: black;
-    font-size:16px;
+    font-size:14px;
+}
+
+.bubblebox{
+    width:auto;
+    height:auto;
+    margin:5px;
+    padding:7px;
+    background-color: #ffffff;
+    box-shadow: #666 1px 1px 1px;
+    border-radius: 7px;
 }

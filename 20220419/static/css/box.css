@@ -33,14 +33,31 @@
     border-radius: 18px;
 }
 
+#statusbar{
+    height:50px;
+    margin: 5px;
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: #777 1px 1px 2px;
+}
+
 .dmsg{
     color: black;
+    display: inline-block;
 }
-.boxmsg{
-    width:100%;
-}
+
 .avtholder{
     height:32px;
     width:32px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.avtholder_{
+    height:32px;
+    width:32px;
+    border-radius: 50%;
     float:left;
 }

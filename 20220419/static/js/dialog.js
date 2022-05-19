@@ -22,20 +22,20 @@ function gEdig(user){
     return edig[user];
 }
 function addbubble(user,bubblec){
-    return "<div class='boxmsg'><img src='https://cdn.sep.cc/avatar/" + gEdig(user) + "?s=32' class='avtholder'>" + bubblec + "</div>"
+    return "<div class='boxmsg'><img src='https://cdn.sep.cc/avatar/" + gEdig(user) + "?s=64' class='avtholder'>" + bubblec + "</div>"
 }
 function genDlgbtn(mts,user,tstr,msgstr){
-    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <p class='bubbletxt'>" + msgstr + "</p></div>"
+    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'> " + user + " " + tstr + "</p> <div class='bubblebox'> <p class='bubbletxt'>" + msgstr + "</p> </div> </div>"
     return addbubble(user,bubbles);
 }
 function genFilebtn(mts,user,tstr,msgstr){
     fmsg = JSON.parse(msgstr);
-    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <a target='_blank' class='bubbletxt' href='/fileDown?fid=" + fmsg.fid + "'>" + fmsg.fname + "</a></div>"
+    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'> " + user + " " + tstr + "</p> <div class='bubblebox'> <a target='_blank' class='bubbletxt' href='/fileDown?fid=" + fmsg.fid + "'>" + fmsg.fname + "</a> </div> </div>"
     return addbubble(user,bubbles);
 }
 function genImgbtn(mts,user,tstr,msgstr){
     fmsg = JSON.parse(msgstr);
-    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <img style='max-width:200px;max-height:200px;object-fit:scale-down;' class='bubbletxt' src='/imgDown?fid=" + fmsg.fid + "'></div>"
+    bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'> " + user + " " + tstr + "</p> <div class='bubblebox'> <img style='max-width:200px;max-height:200px;object-fit:scale-down;' class='bubbletxt' src='/imgDown?fid=" + fmsg.fid + "'> </div> </div>"
     return addbubble(user,bubbles);
 }
 function genDiatdbtn(msg){
@@ -226,7 +226,7 @@ $(window).on("load",function(){
     console.log(userName);
     $.ajaxSettings.async = false;
     $.post("/dataReq",{rqType:"emaildig",username:userName},function(data){
-        iurl = "https://cdn.sep.cc/avatar/" + data + "?s=32"
+        iurl = "https://cdn.sep.cc/avatar/" + data + "?s=64"
         $("#sd_avatar").attr("src",iurl);
         $("#sd_avatar").attr("title",userName);
     });
