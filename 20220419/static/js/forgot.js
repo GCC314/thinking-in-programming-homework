@@ -12,6 +12,7 @@ function validchk(){
         $("#email").val("");
         return false;
     }
+    $("#suggest").html("");
     return true;
 }
 

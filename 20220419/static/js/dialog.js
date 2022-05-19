@@ -6,17 +6,23 @@ var groupList = []
 var msgList = {}
 var msgCache = {}
 var edig = {}
+var nowgts = {}
+
+function getnt(){
+    ndt = new Date();
+    return ndt.getTime();
+}
 
 function genGroupbtn(groupname,ischosen=false){
-    if(ischosen) return "<input type='button' class='groupbtn sidebuttons sidebuttons_c' id='gbtn_" + groupname + "' value='" + groupname + "'>";
-    else return "<input type='button' class='groupbtn sidebuttons' id='gbtn_" + groupname + "' value='" + groupname + "'>";
+    if(ischosen) return "<div class='groupbtn sidebuttons sidebuttons_c' id='gbtn_" + groupname + "'><p class='groupbtn_lbl' id='gbtn_lbl_" + groupname + "'>" + groupname + "</p><p class='unreadcnt' id='gbtn_cnt_" + groupname + "'></p></div>";
+    else return "<div class='groupbtn sidebuttons' id='gbtn_" + groupname + "'><p class='groupbtn_lbl' id='gbtn_lbl_" + groupname + "'>" + groupname + "</p><p class='unreadcnt' id='gbtn_cnt_" + groupname + "'></p></div>";
 }
 function gEdig(user){
     if(!(user in edig)) $.post("/dataReq",{rqType:"emaildig",username:user},function(data){edig[user] = data;});
     return edig[user];
 }
 function addbubble(user,bubblec){
-    return "<div class='boxmsg'><img src='https://www.gravatar.com/avatar/" + gEdig(user) + "?s=32' class='avtholder'>" + bubblec + "</div>"
+    return "<div class='boxmsg'><img src='https://cdn.sep.cc/avatar/" + gEdig(user) + "?s=32' class='avtholder'>" + bubblec + "</div>"
 }
 function genDlgbtn(mts,user,tstr,msgstr){
     bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'>" + user + " " + tstr + "</p> <p class='bubbletxt'>" + msgstr + "</p></div>"
@@ -33,7 +39,6 @@ function genImgbtn(mts,user,tstr,msgstr){
     return addbubble(user,bubbles);
 }
 function genDiatdbtn(msg){
-    console.log(msg);
     dt = new Date(msg[2]);
     if(msg[3] == 't'){
         ustr = genDlgbtn(msg[2].toString(),msg[1],dt.toUTCString(),msg[4]);
@@ -78,6 +83,7 @@ function appendDialog(deltaList){
     }
     $("#dialogbox").html(dtstring);
 }
+
 function renderGroup(){
     console.log("renderingGroup");
     gtstring = "";
@@ -95,6 +101,8 @@ function renderGroup(){
             focusedGroup = gname;
             $(this).toggleClass("sidebuttons_c",true);
             renderDialog();
+            updateGts(focusedGroup,getnt());
+            refreshGts(focusedGroup);
         });
     }
 }
@@ -153,24 +161,50 @@ function updateGroup(){
 
 
 function SendMsg(msgstr,type='t'){
-    ndt = new Date();
-    nt = ndt.getTime();
+    nt = getnt();
     msg = JSON.stringify([focusedGroup,userName,nt,type,msgstr])
     $.post("/dataPush",{rqType:"sendmsg",gname:focusedGroup,sender:userName,ts:nt,mtype:type,msg:msgstr},function(data){
         msgCache[focusedGroup].push([focusedGroup,userName,nt,type,msgstr])
     },async=false);
 }
 
+function refreshGts(groupname){
+    var pre = 0;
+    if(groupname in nowgts){
+        pre = nowgts[groupname];
+    }
+    console.log("refresh called,gts",pre);
+    var nowc = 0;
+    var msize = msgList[groupname].length;
+    for(var i = msize - 1;i >= 0;i--){
+        if(pre >= msgList[groupname][i][2]) break;
+        else nowc++;
+    }
+    if(nowc == 0){
+        $("#gbtn_cnt_" + groupname).html("");
+    }else{
+        $("#gbtn_cnt_" + groupname).html("[unread " + nowc.toString() + " message(s)]");
+    }
+}
+
+function updateGts(groupname,ts){
+    nowgts[groupname] = ts;
+    $.post("/dataPush",{rqType:"updgts",username:userName,groupname:groupname,ts:ts});
+}
+
 function Sync(){
     if(updateGroup()) renderGroup();
     delta = []
-    ndt = new Date();
-    nt = ndt.getTime();
+    nt = getnt();
     for(var gidx in groupList){
         var gname = groupList[gidx];
         d = updMsg(gname,nt);
         if(gname == focusedGroup){
             delta = d;
+        }else{
+            if(d.length != 0){
+                refreshGts(gname);
+            }
         }
     }
     if(delta.length != 0){
@@ -183,20 +217,27 @@ function Sync(){
         appendDialog(delta);
     }
     nowTimestamp = nt;
+    if(focusedGroup != "") updateGts(focusedGroup,nt);
 }
 
 $(window).on("load",function(){
-    $.ajaxSettings.async = false; 
     nowTimestamp = 0;
     userName = document.cookie.substring(9);
     console.log(userName);
+    $.ajaxSettings.async = false;
     $.post("/dataReq",{rqType:"emaildig",username:userName},function(data){
-        iurl = "https://www.gravatar.com/avatar/" + data + "?s=32"
+        iurl = "https://cdn.sep.cc/avatar/" + data + "?s=32"
         $("#sd_avatar").attr("src",iurl);
         $("#sd_avatar").attr("title",userName);
-    },async=false);
+    });
     $("#username").html(userName);
     Sync();
+    $.post("/dataReq",{rqType:"getgts",username:userName},function(data){
+        nowgts = JSON.parse(data);
+    });
+    for(var i in groupList){
+        refreshGts(groupList[i]);
+    }
     mTimer = setInterval("Sync();",4000);
 })
 
@@ -301,6 +342,8 @@ $(".groupbtn").click(function(){
     focusedGroup = gname;
     $(this).toggleClass("sidebuttons_c",true);
     renderDialog();
+    updateGts(focusedGroup,getnt());
+    refreshGts(focusedGroup);
 })
 
 

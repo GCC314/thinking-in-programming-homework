@@ -87,6 +87,8 @@ def dataReq():
         else: return "O"
     if(request.form['rqType'] == "emaildig"):
         return databs.getUserEmailDig(request.form['username'])
+    if(request.form['rqType'] == "getgts"):
+        return databs.getgts(request.form['username'])
     return ""
 
 @webApp.route("/dataPush",methods=["post"])
@@ -96,6 +98,8 @@ def dataPush():
     if(request.form['rqType'] == "sendmsg"):
         databs.sendMsg(request.form['gname'],request.form['sender'],request.form['ts'],request.form['mtype'],request.form['msg'])
         return ""
+    if(request.form['rqType'] == "updgts"):
+        databs.updgts(request.form['username'],request.form['groupname'],request.form['ts'])
     return ""
 
 @webApp.route("/fileUp",methods=["post"])
@@ -135,6 +139,10 @@ def imgDown():
     flist = os.listdir("./static/" + fpath + fid)
     fname = flist[0]
     return webApp.send_static_file(fpath + fid + "/" + fname)
+
+@webApp.route("/favicon.ico")
+def favicon():
+    return webApp.send_static_file("favicon.ico")
 
 if(__name__ == "__main__"):
     databs.dbInit()

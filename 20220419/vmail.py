@@ -3,12 +3,17 @@ from email.mime.text import MIMEText
 from email.header import Header
 import time
 import random
+from email.utils import parseaddr,formataddr
 
 mHost = "smtp.163.com"
 mUser = "hw_ichat_verify@163.com"
 mPass = ""
 sender = "hw_ichat_verify@163.com"
 receivers = []
+
+def _format_addr(s):
+    addr = parseaddr(s)
+    return formataddr(addr)
 
 def sendvm(recmail,code,mtype):
     global mHost,mUser,mPass,sender,receivers
@@ -30,8 +35,8 @@ def sendvm(recmail,code,mtype):
             {code}
         """
     message = MIMEText(msgtext,'plain','utf-8')
-    message['From'] = Header("IChat",'utf-8')
-    message['To'] = Header(recmail,'utf-8')
+    message['From'] = _format_addr("IChat <%s>" % sender)
+    message['To'] = _format_addr(recmail)
     message['Subject'] = Header(subject,'utf-8')
     receivers = [recmail]
     try:
@@ -63,7 +68,7 @@ def verify(recmail,vcode):
     global mp_vcode
     ts = time.time()
     recmail = recmail.lower()
-    if(not mp_vcode.has_key(recmail)): return "N" # not verified
+    if(not recmail in mp_vcode): return "N" # not verified
     if(mp_vcode[recmail][0] != vcode): return "W" # wrong vcode
     if(ts - mp_vcode[recmail][1] > VERIFY_EXPIRE_TIME): return "E" # verification expired
     return "S" # success

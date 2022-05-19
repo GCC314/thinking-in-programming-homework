@@ -33,6 +33,11 @@ def dbInit():
         mtype       text not null,
         content     text
     )""")
+    dbConn.execute("""CREATE TABLE IF NOT EXISTS GTS(
+        username    text,
+        groupname   text,
+        timestamp   bigint
+    )""")
     dbConn.commit()
 
 def UserExist(username):
@@ -148,5 +153,29 @@ def sendMsg(groupname,sender,ts,tp,msg):
     sqlstring = f"""insert into MSG (groupname,sender,timestamp,mtype,content)
     values ("{groupname}","{sender}",{ts},"{tp}","{S2B(msg)}")
     """
+    dbConn.execute(sqlstring)
+    dbConn.commit()
+
+def getgts(username):
+    global dbConn
+    sqlstring = f"""select groupname,timestamp from GTS where username="{username}" """
+    dbRec = dbConn.execute(sqlstring)
+    dic = {}
+    for rec in dbRec:
+        dic[rec[0]] = rec[1]
+    return json.dumps(dic) 
+
+def updgts(username,groupname,ts):
+    global dbConn
+    sqlstring = f"""select timestamp from GTS where username="{username}" AND groupname="{groupname}" """
+    if(dbConn.execute(sqlstring).fetchone() == None):
+        sqlstring = f"""insert into GTS (username,groupname,timestamp)
+        values("{username}","{groupname}",{ts})
+        """
+    else:
+        sqlstring = f"""update GTS
+        set timestamp={ts}
+        where username="{username}" AND groupname="{groupname}"
+        """
     dbConn.execute(sqlstring)
     dbConn.commit()
