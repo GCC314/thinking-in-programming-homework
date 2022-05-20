@@ -21,14 +21,21 @@
                 <div style="float:right;">
                     <form action="/" method="post">
                         <input type="hidden" id="PKG" name="PKG" value="logout_submit">
-                        <input type="submit" class="iconicbtn" name="submit" value="" title="Logout">
+                        <input type="submit" class="iconicbtn" name="submit" value="" title="登出">
                     </form>
                 </div>
                 <div style="float:right;">
-                    <input type='button' class='groupbtn_ iconicbtn' id='groupadd' value='' title="Add a group">
+                    <input type='button' class='groupbtn_ iconicbtn' id='groupadd' value='' title="创建小组">
                 </div>
             </div>
-            <div id="groupbox" style="overflow:auto;">
+            <div class="groupbox" id="groupbox" style="overflow:auto;">
+                <div class="grouphint">
+                    <br>
+                    <br>
+                    Click
+                    <h3 class="iconic"></h3>
+                    to create a group
+                </div>
             </div>
         </div>
         <div id="mainbox" style="height:100%;width:72%;display: inline-block;vertical-align: top;">
@@ -37,10 +44,10 @@
             <div id="inputbox" style="width:100%;vertical-align: bottom;">
                 <input type="file" id="imgholder" style="width:1px;height:1px;display:none;" accept="image/*">
                 <input type="file" id="fileholder" style="width:1px;height:1px;display:none;">
-                <input type="button" id="sendimg" class="iconicbtn_big iconicbtn_big_common" value="" placeholder="Send a picture" style="float:left;color:#222">
-                <input type="button" id="sendfile" class="iconicbtn_big iconicbtn_big_common" value="" placeholder="Send a file not larger than 50M" style="float:left;color:#222">
-                <div id="inputtxt" class="tarea" contenteditable="true"></div>
-                <input type="button" id="submittxt" class="iconicbtn_big sendbtn" name="submittxt" value="" style="float:right;">
+                <input type="button" id="sendimg" class="iconicbtn_big iconicbtn_big_common" value="" placeholder="发送图片" style="float:left;color:#222">
+                <input type="button" id="sendfile" class="iconicbtn_big iconicbtn_big_common" value="" placeholder="发送不超过50M的文件" style="float:left;color:#222">
+                <textarea id="inputtxt" class="tarea" disabled="true"></textarea>
+                <input type="button" id="submittxt" class="iconicbtn_big sendbtn sendbtn_disabled" name="submittxt" value="" style="float:right;">
             </div>
         </div>
     </div>
@@ -49,18 +56,18 @@
         <div style="text-align:center;vertical-align:middle;">
             <div class="suggest" id="addg_sug">
             </div>
-            <div class="poptwrap">
-                <input type="text" value="" name="gname" id="txt_gname" class="poptbox" placeholder="New Group's Name" style="width:90%;">
+            <div class="poptwrap" style="margin:10px auto 10px auto;">
+                <input type="text" value="" name="gname" id="txt_gname" class="poptbox" placeholder="新的小组名称" style="width:90%;">
             </div>
-            <div class="poptwrap">
-                <input type="text" value="" name="uname_sch" id="txt_uname_sch" class="poptbox" placeholder="Search for a user..." style="display:inline-block;width:90%">
+            <div class="poptwrap" style="margin:10px auto 10px auto;">
+                <input type="text" value="" name="uname_sch" id="txt_uname_sch" class="poptbox" placeholder="搜索用户名..." style="display:inline-block;width:90%">
                 <input type="button" value="" id="btn_sch" class="iconicbtn_small" style="display:inline-block;">
             </div>
             <div id="div_ulist" style="height:110px;overflow-y:scroll;background-color: #f0f0f0;border-radius:2px;margin:20px;">
                 <ul id="ul_ulist" style="list-style-type: none;">
                 </ul>
             </div>
-            <input type="button" value="submit" name="addg_submit" id="addg_submit" class="hcbuttons cbuttons" style="margin:0px 10px 0px 10px">
+            <input type="button" value="创建" name="addg_submit" id="addg_submit" class="hcbuttons cbuttons" style="margin:0px 10px 0px 10px">
         </div>
     </div>
     <script type="text/javascript" src="/static/js/dialog.js"></script>

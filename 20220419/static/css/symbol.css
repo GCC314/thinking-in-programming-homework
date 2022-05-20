@@ -2,3 +2,7 @@
     font-family: Material;
     src: url("/static/fonts/material-icon.ttf");
 }
+
+.iconic{
+    font-family: 'Material';
+}

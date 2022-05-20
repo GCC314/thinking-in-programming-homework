@@ -14,6 +14,7 @@
 
 .cbuttons:hover{
     box-shadow: #666 2px 2px 1px;
+    filter: brightness(120%);
 }
 
 .hcbuttons
@@ -31,6 +32,10 @@
     padding: 3px;
     border-radius: 5px;
     box-shadow: #777 1px 1px 2px;
+}
+
+.sidebuttons:hover{
+    filter:brightness(95%);
 }
 
 .sidebuttons_c
@@ -75,11 +80,12 @@
 
 .iconicbtn_big:hover{
     box-shadow: #666 2px 2px 1px;
+    filter: brightness(120%);
 }
 
 .iconicbtn_big_common{
     color: #333333;
-    background-color: #ffffff;
+    background-color: #eeeeee;
 }
 
 .iconicbtn_small{
@@ -117,4 +123,12 @@
 
 .groupbtn_lbl{
     text-align: center;
+}
+
+.sendbtn_disabled{
+    filter: saturate(0%);
+}
+
+.sendbtn_disabled:hover{
+    filter: saturate(0%);
 }

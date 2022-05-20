@@ -1,14 +1,14 @@
 function validchk(){
     email = $("#email").val();
     if(!isEmailValid(email)){
-        $("#suggest").html("Invalid email!");
+        $("#suggest").html("Email非法!");
         $("#email").val("");
         return false;
     }
     eFlag = "";
     $.post("/uInfo",{rqType:"emailexist",email:email},function(data){eFlag = data;});
     if(eFlag != "E"){
-        $("#suggest").html("Email not in use!");
+        $("#suggest").html("Email未被注册!");
         $("#email").val("");
         return false;
     }
@@ -21,15 +21,15 @@ $("#resetpw").click(function(){
     VFlag = "";
     $.post("/uInfo",{rqType:"verifycode",email:$("#email").val(),vcode:$("#vcode").val()},function(data){VFlag = data;});
     if(VFlag == "N"){
-        $("#suggest").html("The email isn't sent yet!");
+        $("#suggest").html("未发送email!!");
         $("#vcode").val("");
     }
     if(VFlag == "W"){
-        $("#suggest").html("Wrong code!");
+        $("#suggest").html("验证码错误!");
         $("#vcode").val("");
     }
     if(VFlag == "E"){
-        $("#suggest").html("Code expired!");
+        $("#suggest").html("验证码过期!");
         $("#vcode").val("");
     }
     $.post("/uInfo",{rqType:"resetps",email:$("email").val()},function(data){});
@@ -38,10 +38,10 @@ $("#resetpw").click(function(){
 
 function btnUpdate(t){
     if(t > 0){
-        $("#sendvm").val("Send VCode(" + t.toString() + ")");
+        $("#sendvm").val("发送验证码(" + t.toString() + ")");
         if(t == 60) $("#sendvm").toggleClass("hidbutton_disable",true);
     }else{
-        $("#sendvm").val("Send VCode");
+        $("#sendvm").val("发送验证码");
         $("#sendvm").toggleClass("hidbutton_disable",false);
     }
 }
@@ -79,7 +79,7 @@ $("#sendvm").click(function(){
     if(!validchk()) return;
     $.post("/uInfo",{rqType:"sendmail",email:$("#email").val(),mtype:"RS"},function(data){
         if(data == "F"){
-            $("#suggest").html("Failed to send email!");
+            $("#suggest").html("Email发送失败!");
             return;
         }
         TimerStart();

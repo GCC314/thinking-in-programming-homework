@@ -3,40 +3,40 @@ function validchk(){
     passwd = $("#passwd").val();
     email = $("#email").val();
     if(!isUsernameValid(uname)){
-        $("#suggest").html("Invalid username!");
+        $("#suggest").html("用户名非法!");
         $("#username").val("");
         return false;
     }
     if(passwd.length < 8){
-        $("#suggest").html("Password too short!");
+        $("#suggest").html("密码过短!");
         $("#passwd").val("");
         return false;
     }
     if(passwd.length > 25){
-        $("#suggest").html("Password too long!");
+        $("#suggest").html("密码过长!");
         $("#passwd").val("");
         return false;
     }
     if(!isPasswdValid(passwd)){
-        $("#suggest").html("Invalid password!");
+        $("#suggest").html("密码非法!");
         $("#passwd").val("");
         return false;
     }
     if(!isEmailValid(email)){
-        $("#suggest").html("Invalid email!");
+        $("#suggest").html("Email非法!");
         $("#email").val("");
         return false;
     }
     var eFlag = "";
     $.post("/uInfo",{rqType:"userexist",username:uname},function(data){eFlag = data;});
     if(eFlag == "E"){
-        $("#suggest").html("User exists!");
+        $("#suggest").html("用户已存在!");
         $("#username").val("");
         return false;
     }
     $.post("/uInfo",{rqType:"emailexist",email:email},function(data){eFlag = data;});
     if(eFlag == "E"){
-        $("#suggest").html("Email in use!");
+        $("#suggest").html("Email已被占用!");
         $("#email").val("");
         return false;
     }
@@ -49,15 +49,15 @@ $("#register").click(function(){
     VFlag = "";
     $.post("/uInfo",{rqType:"verifycode",email:$("#email").val(),vcode:$("#vcode").val()},function(data){VFlag = data;});
     if(VFlag == "N"){
-        $("#suggest").html("The email isn't sent yet!");
+        $("#suggest").html("未发送email!");
         $("#vcode").val("");
     }
     if(VFlag == "W"){
-        $("#suggest").html("Wrong code!");
+        $("#suggest").html("验证码错误!");
         $("#vcode").val("");
     }
     if(VFlag == "E"){
-        $("#suggest").html("Code expired!");
+        $("#suggest").html("验证码过期!");
         $("#vcode").val("");
     }
     $.post("/uInfo",{rqType:"ureg",username:$("#username").val(),passwd:$("#passwd").val(),email:$("#email").val()},function(data){});
@@ -66,10 +66,10 @@ $("#register").click(function(){
 
 function btnUpdate(t){
     if(t > 0){
-        $("#sendvm").val("Send VCode(" + t.toString() + ")");
+        $("#sendvm").val("发送验证码(" + t.toString() + ")");
         if(t == 60) $("#sendvm").toggleClass("hidbutton_disable",true);
     }else{
-        $("#sendvm").val("Send VCode");
+        $("#sendvm").val("发送验证码");
         $("#sendvm").toggleClass("hidbutton_disable",false);
     }
 }
@@ -115,7 +115,7 @@ $("#sendvm").click(function(){
     if(!validchk()) return;
     $.post("/uInfo",{rqType:"sendmail",email:$("#email").val(),mtype:"RG"},function(data){
         if(data == "F"){
-            $("#suggest").html("Failed to send email!");
+            $("#suggest").html("Email发送失败!");
             return;
         }
         TimerStart();

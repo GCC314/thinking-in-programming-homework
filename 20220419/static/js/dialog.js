@@ -103,6 +103,9 @@ function renderGroup(){
             renderDialog();
             updateGts(focusedGroup,getnt());
             refreshGts(focusedGroup);
+            $("#inputtxt").attr("disabled",false);
+            $("#inputtxt").val("");
+            $("#submittxt").toggleClass("sendbtn_disabled",true);
         });
     }
 }
@@ -183,7 +186,7 @@ function refreshGts(groupname){
     if(nowc == 0){
         $("#gbtn_cnt_" + groupname).html("");
     }else{
-        $("#gbtn_cnt_" + groupname).html("[unread " + nowc.toString() + " message(s)]");
+        $("#gbtn_cnt_" + groupname).html("[未读 " + nowc.toString() + " 条消息]");
     }
 }
 
@@ -238,7 +241,17 @@ $(window).on("load",function(){
     for(var i in groupList){
         refreshGts(groupList[i]);
     }
+    $("#inputtxt").val("");
     mTimer = setInterval("Sync();",4000);
+})
+
+$("#inputtxt").on('keyup',function(){
+    if(focusedGroup == 0) return;
+    if($("#inputtxt").val() == ""){
+        $("#submittxt").toggleClass("sendbtn_disabled",true);
+    }else{
+        $("#submittxt").toggleClass("sendbtn_disabled",false);
+    }
 })
 
 $("#submittxt").click(function(){
@@ -246,13 +259,11 @@ $("#submittxt").click(function(){
         console.log("attempt to submit text failed");
         return;
     }
-    var txt = $("#inputtxt").html();
-    if(txt == ""){
-        alert("Message cannot be empty!");
-        return;
-    }
+    var txt = $("#inputtxt").val();
+    if(txt == "") return;
     SendMsg(txt);
-    $("#inputtxt").html("");
+    $("#inputtxt").val("");
+    $("#submittxt").toggleClass("sendbtn_disabled",true);
 })
 
 function genAddGroupbtn(uname,dable=false){
@@ -306,7 +317,7 @@ function isValidGroupname(gname){
 $("#addg_submit").click(function(){
     groupName = $("#txt_gname").val();
     if(!isValidGroupname(groupName)){
-        $("#addg_sug").html("Invalid Group Name");
+        $("#addg_sug").html("小组名称非法!");
         $("#txt_gname").val("");
         return;
     }
@@ -327,7 +338,7 @@ $("#addg_submit").click(function(){
         if(updateGroup()) renderGroup();
         $(this).parent().parent().css({"display":"none"});
     }else{
-        $("#addg_sug").html("Group Name exists");
+        $("#addg_sug").html("小组已存在");
         $("#txt_gname").val("");
     }
 })
@@ -344,6 +355,9 @@ $(".groupbtn").click(function(){
     renderDialog();
     updateGts(focusedGroup,getnt());
     refreshGts(focusedGroup);
+    $("#inputtxt").attr("disabled",false);
+    $("#inputtxt").val("");
+    $("#submittxt").toggleClass("sendbtn_disabled",true);
 })
 
 
