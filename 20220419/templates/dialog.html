@@ -18,6 +18,9 @@
         <div id="sidebar" style="height:100%;width:25%;float:left;vertical-align: top;">
             <div id="statusbar">
                 <img id="sd_avatar" class="avtholder_" src="0.jpg" title="username">
+                <div style="float:left;margin: auto auto auto 10px;" id="sidebar_uname">
+                    username
+                </div>
                 <div style="float:right;">
                     <form action="/" method="post">
                         <input type="hidden" id="PKG" name="PKG" value="logout_submit">
@@ -29,19 +32,14 @@
                 </div>
             </div>
             <div class="groupbox" id="groupbox" style="overflow:auto;">
-                <div class="grouphint">
-                    <br>
-                    <br>
-                    Click
-                    <h3 class="iconic"></h3>
-                    to create a group
-                </div>
+                <div class='grouphint'><br><br>Click<h3 class='iconic'></h3>to create a group</div>
             </div>
         </div>
         <div id="mainbox" style="height:100%;width:72%;display: inline-block;vertical-align: top;">
             <div id="dialogbox" style="overflow:auto;height:79%;width:100%;">
             </div>
             <div id="inputbox" style="width:100%;vertical-align: bottom;">
+                <input type="button" id="exitgroup" class="iconicbtn_big iconicbtn_big_common" value="" placeholder="退出群组" style="float:left;color:#222">
                 <input type="file" id="imgholder" style="width:1px;height:1px;display:none;" accept="image/*">
                 <input type="file" id="fileholder" style="width:1px;height:1px;display:none;">
                 <input type="button" id="sendimg" class="iconicbtn_big iconicbtn_big_common" value="" placeholder="发送图片" style="float:left;color:#222">

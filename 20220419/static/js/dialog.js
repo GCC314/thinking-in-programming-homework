@@ -1,6 +1,5 @@
 nowTimestamp = 0;
 var focusedGroup = "";
-var userId = 0;
 var userName = "";
 var groupList = []
 var msgList = {}
@@ -25,6 +24,7 @@ function addbubble(user,bubblec){
     return "<div class='boxmsg'><img src='https://cdn.sep.cc/avatar/" + gEdig(user) + "?s=64' class='avtholder'>" + bubblec + "</div>"
 }
 function genDlgbtn(mts,user,tstr,msgstr){
+
     bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'> " + user + " " + tstr + "</p> <div class='bubblebox'> <p class='bubbletxt'>" + msgstr + "</p> </div> </div>"
     return addbubble(user,bubbles);
 }
@@ -88,6 +88,11 @@ function renderGroup(){
     console.log("renderingGroup");
     gtstring = "";
     for(var gidx in groupList) gtstring += genGroupbtn(groupList[gidx],groupList[gidx] == focusedGroup);
+    if(gtstring == ""){
+        gtstring = "<div class='grouphint'><br><br>Click<h3 class='iconic'></h3>to create a group</div>"
+        $("#groupbox").html(gtstring);
+        return;
+    }
     $("#groupbox").html(gtstring);
     for(var gidx in groupList){
         group = groupList[gidx];
@@ -162,9 +167,16 @@ function updateGroup(){
     return updflag;
 }
 
+function MsgReplace(msgstr){
+    msgstr = msgstr.replace(/\r\n/g,"<br>");
+    msgstr = msgstr.replace(/\n/g,"<br>");
+    msgstr = msgstr.replace(/\s/g," ");
+    return msgstr;
+}
 
 function SendMsg(msgstr,type='t'){
     nt = getnt();
+    if(type == 't') msgstr = MsgReplace(msgstr);
     msg = JSON.stringify([focusedGroup,userName,nt,type,msgstr])
     $.post("/dataPush",{rqType:"sendmsg",gname:focusedGroup,sender:userName,ts:nt,mtype:type,msg:msgstr},function(data){
         msgCache[focusedGroup].push([focusedGroup,userName,nt,type,msgstr])
@@ -226,6 +238,7 @@ function Sync(){
 $(window).on("load",function(){
     nowTimestamp = 0;
     userName = document.cookie.substring(9);
+    $("#sidebar_uname").html(userName);
     console.log(userName);
     $.ajaxSettings.async = false;
     $.post("/dataReq",{rqType:"emaildig",username:userName},function(data){
@@ -255,7 +268,7 @@ $("#inputtxt").on('keyup',function(){
 })
 
 $("#submittxt").click(function(){
-    if(focusedGroup == 0){
+    if(focusedGroup == ""){
         console.log("attempt to submit text failed");
         return;
     }
@@ -360,6 +373,23 @@ $(".groupbtn").click(function(){
     $("#submittxt").toggleClass("sendbtn_disabled",true);
 })
 
+$("#exitgroup").click(function(){
+    if(focusedGroup == "") return;
+    if(!confirm("确认退出该群聊?")) return;
+    $.post("/dataPush",{rqType:"exitgroup",username:userName,groupname:focusedGroup},function(data){
+        var ptr;
+        for(ptr = 0;ptr < groupList.length;ptr++)
+            if(focusedGroup == groupList[ptr]) break;
+        if(ptr == groupList.length) return;
+        groupList.splice(ptr,1);
+        msgList[focusedGroup] = [];
+        msgCache[focusedGroup] = [];
+        nowgts[focusedGroup] = 0;
+        renderGroup();
+        focusedGroup == "";
+        $("#dialogbox").html("");
+    },async=false);
+})
 
 // FILE UPLOAD PART
 
@@ -370,8 +400,6 @@ $("#sendfile").click(function(){
     if(fuploading) return;
     $("#fileholder").trigger("click");
 })
-
-// TODO : make the button animated
 
 $("#fileholder").change(function(){
     flist = $(this).get(0).files;
@@ -428,8 +456,6 @@ $("#sendimg").click(function(){
     if(iuploading) return;
     $("#imgholder").trigger("click");
 })
-
-// TODO : make the button animated
 
 $("#imgholder").change(function(){
     flist = $(this).get(0).files;

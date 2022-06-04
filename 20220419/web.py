@@ -100,6 +100,10 @@ def dataPush():
         return ""
     if(request.form['rqType'] == "updgts"):
         databs.updgts(request.form['username'],request.form['groupname'],request.form['ts'])
+        return ""
+    if(request.form['rqType'] == "exitgroup"):
+        databs.delUserfromGroup(request.form['username'],request.form['groupname'])
+        return ""
     return ""
 
 @webApp.route("/fileUp",methods=["post"])
@@ -140,7 +144,7 @@ def imgDown():
     fname = flist[0]
     return webApp.send_static_file(fpath + fid + "/" + fname)
 
-@webApp.route("/favicon.ico")
+@webApp.route("/favicon.ico",methods=["get"])
 def favicon():
     return webApp.send_static_file("favicon.ico")
 

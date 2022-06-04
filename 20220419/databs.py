@@ -5,10 +5,10 @@ import time
 import base64
 import hashlib
 
-def S2B(ostr):
+def S2B(ostr): # String To Base64-String
     return base64.b64encode(ostr.encode()).decode()
 
-def B2S(bstr):
+def B2S(bstr): # Base64-String To String
     return base64.b64decode(bstr.encode()).decode()
 
 dbConn = None
@@ -42,83 +42,72 @@ def dbInit():
 
 def UserExist(username):
     global dbConn
-    sqlstring = f"""select username from USERS where username="{username}" """
-    dbRec = dbConn.execute(sqlstring).fetchone()
+    dbRec = dbConn.execute("""select username from USERS where username=? """,(username,)).fetchone()
     return dbRec != None
 
 def EmailExist(email):
     global dbConn
-    sqlstring = f"""select email from USERS where email="{email}" """
-    dbRec = dbConn.execute(sqlstring).fetchone()
+    dbRec = dbConn.execute("""select email from USERS where email=? """,(email,)).fetchone()
     return dbRec != None
 
 def GroupExist(groupname):
     global dbConn
-    sqlstring = f"""select groupname from GROUPS where groupname="{groupname}" """
-    dbRec = dbConn.execute(sqlstring).fetchone()
+    dbRec = dbConn.execute("""select groupname from GROUPS where groupname=? """,(groupname,)).fetchone()
     return dbRec != None
 
 def UserPwdCheck(username,passwd):
     global dbConn
-    sqlstring = f"""select passwd from USERS where username="{username}" """
-    dbRec = dbConn.execute(sqlstring).fetchone()
+    dbRec = dbConn.execute("""select passwd from USERS where username=? """,(username,)).fetchone()
     return dbRec[0] == passwd
 
 def UserRegister(username,passwd,email):
     global dbConn
-    sqlstring = f"""insert into USERS
+    dbConn.execute("""insert into USERS
     (username,passwd,email,groups)
-    values("{username}","{passwd}","{email.lower()}","{S2B("[]")}")
-    """
-    dbConn.execute(sqlstring)
+    values(?,?,?,?)
+    """,(username,passwd,email.lower(),S2B("[]")))
     dbConn.commit()
 
 def UserPswdReset(email):
     global dbConn
-    sqlstring = f"""update USERS
+    dbConn.execute("""update USERS
     set passwd="12345678"
-    where email="{email.lower()}"
-    """
-    dbConn.execute(sqlstring)
+    where email=?
+    """,(email.lower(),))
     dbConn.commit()
 
 def getUserGroup(username):
     global dbConn
-    sqlstring = f"""select groups from USERS where username="{username}" """
-    dbRec = dbConn.execute(sqlstring).fetchone()
+    dbRec = dbConn.execute("""select groups from USERS where username=? """,(username,)).fetchone()
     return B2S(dbRec[0])
 
 def getUserEmailDig(username):
     global dbConn
-    sqlstring = f"""select email from USERS where username="{username}" """
-    dbRec = dbConn.execute(sqlstring).fetchone()
+    dbRec = dbConn.execute("""select email from USERS where username=? """,(username,)).fetchone()
     estr = dbRec[0]
     return hashlib.md5(estr.encode(encoding="UTF-8")).hexdigest()
 
 def addGroup2User(username,groupname):
     global dbConn
     print(username,groupname)
-    sqlstring = f"""select groups from USERS where username="{username}" """
-    dbRec = dbConn.execute(sqlstring).fetchone()
+    dbRec = dbConn.execute("""select groups from USERS where username=? """,(username,)).fetchone()
     if(dbRec == None): return
     mlst = json.loads(B2S(dbRec[0]))
     if(groupname in mlst): return
     mlst.append(groupname)
-    sqlstring = f"""update USERS
-    set groups="{S2B(json.dumps(mlst))}"
-    where username="{username}"
-    """
-    dbConn.execute(sqlstring)
+    dbConn.execute("""update USERS
+    set groups=?
+    where username=?
+    """,(S2B(json.dumps(mlst)),username))
     dbConn.commit()
 
 def addGroup(groupname,usernames):
     global dbConn
     if(GroupExist(groupname)): return "F"
-    sqlstring = f"""insert into GROUPS
+    dbConn.execute("""insert into GROUPS
     (groupname,users)
-    values("{groupname}","{S2B(usernames)}")
-    """
-    dbConn.execute(sqlstring)
+    values(?,?)
+    """,(groupname,S2B(usernames)))
     for user in json.loads(usernames):
         addGroup2User(user,groupname)
     dbConn.commit()
@@ -126,8 +115,34 @@ def addGroup(groupname,usernames):
 
 def getGroupAllUser(groupname):
     global dbConn
-    sqlstring = f"""select users from GROUPS where groupname="{groupname}" """
-    return B2S(dbConn.execute(sqlstring).fetchone()[0])
+    return B2S(dbConn.execute("""select users from GROUPS where groupname=? """,(groupname,)).fetchone()[0])
+
+def delUserfromGroup(username,groupname):
+    global dbConn
+    # USERS
+    ugroups = json.loads(B2S(dbConn.execute("""select groups from USERS where username=? """,(username,)).fetchone()[0]))
+    ugroups = [group for group in ugroups if group != groupname]
+    dbConn.execute("""update USERS
+    SET groups=?
+    where username=?
+    """,(S2B(json.dumps(ugroups)),username))
+    # GTS
+    dbConn.execute("""delete from GTS where username=? AND groupname=? """,(username,groupname))
+    # GROUPS -> users
+    gusers = json.loads(B2S(dbConn.execute(f"""select users from GROUPS where groupname=? """,(groupname,)).fetchone()[0]))
+    gusers = [usr for usr in ugroups if usr != username]
+    if(len(gusers) > 0):
+        dbConn.execute("""update GROUPS
+        SET users=?
+        where groupname=?
+        """,(S2B(json.dumps(gusers)),groupname))
+    else:
+        # GROUPS -> del
+        # MSG -> del
+        dbConn.execute("""delete from GROUPS where groupname=? """,(groupname,))
+        dbConn.execute("""delete from MSG where groupname=? """,(groupname,))
+    # commit
+    dbConn.commit()
 
 def rmsg2msg(msg):
     ml = list(msg)
@@ -136,30 +151,26 @@ def rmsg2msg(msg):
 
 def reqUpdMsg(groupname,ubts):
     global dbConn
-    sqlstring = f"""select groupname,sender,timestamp,mtype,content from MSG where groupname="{groupname}" and timestamp<={ubts}"""
-    rmsgpkg = dbConn.execute(sqlstring).fetchall()
+    rmsgpkg = dbConn.execute("""select groupname,sender,timestamp,mtype,content from MSG where groupname=? and timestamp<=? """,(groupname,ubts)).fetchall()
     msgpkg = [rmsg2msg(msg) for msg in rmsgpkg]
     return json.dumps(msgpkg)
 
 def reqSyncMsg(groupname,lbts,ubts,sid):
     global dbConn
-    sqlstring = f"""select groupname,sender,timestamp,mtype,content from MSG where groupname="{groupname}" and timestamp>={lbts} and timestamp<={ubts}"""
-    msgpkg = dbConn.execute(sqlstring).fetchall()
+    msgpkg = dbConn.execute("""select groupname,sender,timestamp,mtype,content from MSG where groupname=? and timestamp>=? and timestamp<=? """,(groupname,lbts,ubts)).fetchall()
     sieve = [rmsg2msg(msg) for msg in msgpkg if msg[1] != sid]
     return json.dumps(sieve)
 
 def sendMsg(groupname,sender,ts,tp,msg):
     global dbConn
-    sqlstring = f"""insert into MSG (groupname,sender,timestamp,mtype,content)
-    values ("{groupname}","{sender}",{ts},"{tp}","{S2B(msg)}")
-    """
-    dbConn.execute(sqlstring)
+    dbConn.execute("""insert into MSG (groupname,sender,timestamp,mtype,content)
+    values (?,?,?,?,?)
+    """,(groupname,sender,ts,tp,S2B(msg)))
     dbConn.commit()
 
 def getgts(username):
     global dbConn
-    sqlstring = f"""select groupname,timestamp from GTS where username="{username}" """
-    dbRec = dbConn.execute(sqlstring)
+    dbRec = dbConn.execute("""select groupname,timestamp from GTS where username=? """,(username,))
     dic = {}
     for rec in dbRec:
         dic[rec[0]] = rec[1]
@@ -167,15 +178,13 @@ def getgts(username):
 
 def updgts(username,groupname,ts):
     global dbConn
-    sqlstring = f"""select timestamp from GTS where username="{username}" AND groupname="{groupname}" """
-    if(dbConn.execute(sqlstring).fetchone() == None):
-        sqlstring = f"""insert into GTS (username,groupname,timestamp)
-        values("{username}","{groupname}",{ts})
-        """
+    if(dbConn.execute("""select timestamp from GTS where username=? AND groupname=? """,(username,groupname)).fetchone() == None):
+        dbConn.execute("""insert into GTS (username,groupname,timestamp)
+        values(?,?,?)
+        """,(username,groupname,ts))
     else:
-        sqlstring = f"""update GTS
-        set timestamp={ts}
-        where username="{username}" AND groupname="{groupname}"
-        """
-    dbConn.execute(sqlstring)
+        dbConn.execute("""update GTS
+        set timestamp=?
+        where username=? AND groupname=?
+        """,(ts,username,groupname))
     dbConn.commit()

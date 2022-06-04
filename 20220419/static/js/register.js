@@ -122,7 +122,6 @@ $("#sendvm").click(function(){
         $("#register").attr("disabled",false);
         $("#register").toggleClass("hcbuttons",true);
     });
-    console.log("4");
 })
 
 
