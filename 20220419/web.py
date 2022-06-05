@@ -50,12 +50,6 @@ def uInfo():
     if(request.form['rqType'] == "emailexist"):
         if(databs.EmailExist(request.form['email'])): return "E"
         else: return "O"
-    """
-    if(request.form['rqType'] == "check"):
-        if(not databs.UserExist(request.form['username'])): return "N"
-        if(databs.UserPwdCheck(request.form['username'],request.form['passwd'])): return "T"
-        else: return "F"
-    """
     if(request.form['rqType'] == "login"):
         if(not databs.UserExist(request.form['username'])): return "N"
         if(databs.UserPwdCheck(request.form['username'],request.form['passwd'])):

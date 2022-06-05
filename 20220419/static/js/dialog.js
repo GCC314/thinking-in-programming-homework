@@ -5,40 +5,40 @@ var groupList = []
 var msgList = {}
 var msgCache = {}
 var edig = {}
-var nowgts = {}
+var nowgts = {} // The timestamp of groups at this user's last visit
 
-function getnt(){
+function getnt(){ // Get timestamp of now
     ndt = new Date();
     return ndt.getTime();
 }
 
-function genGroupbtn(groupname,ischosen=false){
+function genGroupbtn(groupname,ischosen=false){ // Generate Group Button
     if(ischosen) return "<div class='groupbtn sidebuttons sidebuttons_c' id='gbtn_" + groupname + "'><p class='groupbtn_lbl' id='gbtn_lbl_" + groupname + "'>" + groupname + "</p><p class='unreadcnt' id='gbtn_cnt_" + groupname + "'></p></div>";
     else return "<div class='groupbtn sidebuttons' id='gbtn_" + groupname + "'><p class='groupbtn_lbl' id='gbtn_lbl_" + groupname + "'>" + groupname + "</p><p class='unreadcnt' id='gbtn_cnt_" + groupname + "'></p></div>";
 }
-function gEdig(user){
+function gEdig(user){ // Generate Email Digest (For avatar rendering)
     if(!(user in edig)) $.post("/dataReq",{rqType:"emaildig",username:user},function(data){edig[user] = data;});
     return edig[user];
 }
-function addbubble(user,bubblec){
+function addbubble(user,bubblec){ // Add Text Bubble
     return "<div class='boxmsg'><img src='https://cdn.sep.cc/avatar/" + gEdig(user) + "?s=64' class='avtholder'>" + bubblec + "</div>"
 }
-function genDlgbtn(mts,user,tstr,msgstr){
+function genDlgbtn(mts,user,tstr,msgstr){ // Generate Dialog Button (with txt bubble)
 
     bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'> " + user + " " + tstr + "</p> <div class='bubblebox'> <p class='bubbletxt'>" + msgstr + "</p> </div> </div>"
     return addbubble(user,bubbles);
 }
-function genFilebtn(mts,user,tstr,msgstr){
+function genFilebtn(mts,user,tstr,msgstr){ // Generate File Button
     fmsg = JSON.parse(msgstr);
     bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'> " + user + " " + tstr + "</p> <div class='bubblebox'> <a target='_blank' class='bubbletxt' href='/fileDown?fid=" + fmsg.fid + "'>" + fmsg.fname + "</a> </div> </div>"
     return addbubble(user,bubbles);
 }
-function genImgbtn(mts,user,tstr,msgstr){
+function genImgbtn(mts,user,tstr,msgstr){ // Generate Image Button
     fmsg = JSON.parse(msgstr);
     bubbles = "<div class='dmsg' id='msg" + mts + "'><p class='bubbletip'> " + user + " " + tstr + "</p> <div class='bubblebox'> <img style='max-width:200px;max-height:200px;object-fit:scale-down;' class='bubbletxt' src='/imgDown?fid=" + fmsg.fid + "'> </div> </div>"
     return addbubble(user,bubbles);
 }
-function genDiatdbtn(msg){
+function genDiatdbtn(msg){ // Generate Dialog Button (a general function)
     dt = new Date(msg[2]);
     if(msg[3] == 't'){
         ustr = genDlgbtn(msg[2].toString(),msg[1],dt.toUTCString(),msg[4]);
@@ -115,7 +115,7 @@ function renderGroup(){
     }
 }
 
-function updMsg(gname,nt){
+function updateMsg(gname,nt){
     var pqueue = [];
     if(!(gname in msgList)) msgList[gname] = [];
     if(!(gname in msgCache)) msgCache[gname] = [];
@@ -167,14 +167,14 @@ function updateGroup(){
     return updflag;
 }
 
-function MsgReplace(msgstr){
+function MsgReplace(msgstr){ // Replace new line with <br>
     msgstr = msgstr.replace(/\r\n/g,"<br>");
     msgstr = msgstr.replace(/\n/g,"<br>");
     msgstr = msgstr.replace(/\s/g," ");
     return msgstr;
 }
 
-function SendMsg(msgstr,type='t'){
+function SendMsg(msgstr,type='t'){ // Send Message to Server
     nt = getnt();
     if(type == 't') msgstr = MsgReplace(msgstr);
     msg = JSON.stringify([focusedGroup,userName,nt,type,msgstr])
@@ -183,7 +183,7 @@ function SendMsg(msgstr,type='t'){
     },async=false);
 }
 
-function refreshGts(groupname){
+function refreshGts(groupname){ // Refresh the group timestamp rendering
     var pre = 0;
     if(groupname in nowgts){
         pre = nowgts[groupname];
@@ -202,18 +202,18 @@ function refreshGts(groupname){
     }
 }
 
-function updateGts(groupname,ts){
+function updateGts(groupname,ts){ // Require group timestamp from server
     nowgts[groupname] = ts;
     $.post("/dataPush",{rqType:"updgts",username:userName,groupname:groupname,ts:ts});
 }
 
-function Sync(){
+function Sync(){ // !! IMPORTANT !!
     if(updateGroup()) renderGroup();
     delta = []
     nt = getnt();
     for(var gidx in groupList){
         var gname = groupList[gidx];
-        d = updMsg(gname,nt);
+        d = updateMsg(gname,nt);
         if(gname == focusedGroup){
             delta = d;
         }else{
@@ -279,7 +279,7 @@ $("#submittxt").click(function(){
     $("#submittxt").toggleClass("sendbtn_disabled",true);
 })
 
-function genAddGroupbtn(uname,dable=false){
+function genAddGroupbtn(uname,dable=false){ // Generate Add Group Button in the popup window
     if(dable) return "<li class='gadd_li gadd_li_dable' id='gadd_li_n_" + uname + "'>" + uname + "</li>";
     else return "<li class='gadd_li' id='gadd_li_n_" + uname + "'>" + uname + "</li>"
 }
@@ -292,11 +292,11 @@ $("#groupadd").click(function(){
     $("#pop_addg").css({"display":"block"});
 })
 
-$(".popup_esc_btn").click(function(){
+$(".popup_esc_btn").click(function(){ // Exit the popup window
     $(this).parent().css({"display":"none"});
 })
 
-$("#btn_sch").click(function(){
+$("#btn_sch").click(function(){ // Search an exist user from the server
     unameSch = $("#txt_uname_sch").val();
     console.log(unameSch);
     $.post("/dataReq",{rqType:"userexist",username:unameSch},function(data){
@@ -312,7 +312,7 @@ $("#btn_sch").click(function(){
     $("#txt_uname_sch").val("");
 })
 
-$(".gadd_li").dblclick(function(){
+$(".gadd_li").dblclick(function(){ // Remove a user in the popup window
     if($(this).hasClass("gadd_li_dable")) return;
     $(this).remove();
 })
@@ -327,7 +327,7 @@ function isValidGroupname(gname){
     return true;
 }
 
-$("#addg_submit").click(function(){
+$("#addg_submit").click(function(){ // Require the server to add a group 
     groupName = $("#txt_gname").val();
     if(!isValidGroupname(groupName)){
         $("#addg_sug").html("小组名称非法!");

@@ -144,7 +144,7 @@ def delUserfromGroup(username,groupname):
     # commit
     dbConn.commit()
 
-def rmsg2msg(msg):
+def rmsg2msg(msg): # extract base64-encoded messages
     ml = list(msg)
     ml[-1] = B2S(ml[-1])
     return ml
